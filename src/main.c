@@ -33,7 +33,7 @@ void main(int argc, char** argv) {
 		while(fread(current_byte, 1, 1, file) != EOF) {
 			//TODO: extraction algorithm.
 			//magic happens here.
-		}}
-
+		}
+	}
 	exit(0);
 }
