@@ -9,7 +9,7 @@ UFAL
 
 void main(int argc, char** argv) {
 	// The command that will determine the operation to be executed is passed as the first argument (argv[1]).
-	// the available command/operation touples are: (c, compress) and (e, extract). 
+	// the available command/operation touples are: (-c, compress) and (-e, extract). 
 	// The file that will be used is passed as the second argument (argv[2]) when the program is executed.
 	
 	// An example of the usage is: ./huffman c picture.jpg, that will compress the file "picture.jpg"
@@ -19,7 +19,7 @@ void main(int argc, char** argv) {
 	FILE* file = fopen(argv[2], "r");
 
 	//
-	if(strcmp(argv[1], "c") == 0) {
+	if(strcmp(argv[1], "-c") == 0) {
 		void* current_byte;
 		//fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
 		while(fread(current_byte, 1, 1, file) != EOF) {
@@ -27,7 +27,7 @@ void main(int argc, char** argv) {
 			//magic happens here.
 		}
 	} 
-	else if(strcmp(argv[1], "e") == 0) {
+	else if(strcmp(argv[1], "-e") == 0) {
 		void* current_byte;
 		//fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
 		while(fread(current_byte, 1, 1, file) != EOF) {
