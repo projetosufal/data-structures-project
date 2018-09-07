@@ -6,7 +6,7 @@ UFAL
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "linkedlist.h>"
+#include "linkedlist.h"
 
 void main(int argc, char** argv) {
 	// The command that will determine the operation to be executed is passed as the first argument (argv[1]).

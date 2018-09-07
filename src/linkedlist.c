@@ -54,23 +54,3 @@ void add_freq(fnode_l** head, void* item) {
 		current = current->next;
 	}
 }
-
-void main(void) {
-	fnode_l* list = NULL;
-	int a = 12, b = 12, c = 12, d = 12;
-	add_freq(&list, (void*)&a);
-	add_freq(&list, (void*)&b);
-	add_freq(&list, (void*)&c);
-	add_freq(&list, (void*)&d);
-
-	if(list == NULL) {
-		printf("deuruim");
-	}
-
-	while(list != NULL) {
-		printf("NODE: %d FREQ: %d\n", *((int *)list->value), list->freq);
-		list = list->next;
-	}
-	
-	exit(0);
-}
