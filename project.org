@@ -32,7 +32,7 @@
   - [ ] Pratical example
   - [ ] Plot results
 - [ ] Program [0/4]
-  - [ ] Data structures
+  - [ ] Data structures [0/2]
     - [ ] Priority queue 
     - [ ] Priority queue w/ Heap
   - [ ] Data storage & run
