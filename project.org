@@ -1,0 +1,41 @@
+#+STARTUP: overview
+#+TITLE: Data structure projects
+#+CREATOR: Matheus Costa (macc)
+
+* Project development
+** TODO General Documentation
+- [-] Presentation [1/5]
+  - [X] License 
+  - [ ] Format
+  - [ ] Org general file
+  - [ ] LaTex files
+
+** TODO Segmentation tree
+- [ ] TODO
+  
+** TODO Huffman
+- [ ] Documentation [0/2]
+  - [ ] Every ABT
+  - [ ] TODO
+- [ ] Huffman algorithm [0/3]
+  - [ ] Compress files
+  - [ ] Extract files
+  - [ ] Structures done with pointer to void
+- [ ] Write unitary cases for every data structure [0/1]
+  - [ ] TODO
+- [ ] Program [0/1]
+  - [ ] MakeFile
+
+** TODO Priority Queue - With vs. Without Heap
+- [ ] Documentation
+  - [ ] Program details
+  - [ ] Pratical example
+  - [ ] Plot results
+- [ ] Program
+  - [ ] Data structures
+    - [ ] Priority queue 
+    - [ ] Priority queue w/ Heap
+  - [ ] Data storage & run
+  - [ ] Info gathering solution for comparison
+  - [ ] Usage of MakeFile/Program execution method
+
