@@ -15,7 +15,7 @@
   
 ** TODO Huffman
 - [ ] Documentation [0/2]
-  - [ ] Every ABT
+  - [ ] Every ADT
   - [ ] TODO
 - [ ] Huffman algorithm [0/3]
   - [ ] Compress files
@@ -27,15 +27,14 @@
   - [ ] MakeFile
 
 ** TODO Priority Queue - With vs. Without Heap
-- [ ] Documentation
+- [ ] Documentation [0/3]
   - [ ] Program details
   - [ ] Pratical example
   - [ ] Plot results
-- [ ] Program
+- [ ] Program [0/4]
   - [ ] Data structures
     - [ ] Priority queue 
     - [ ] Priority queue w/ Heap
   - [ ] Data storage & run
   - [ ] Info gathering solution for comparison
   - [ ] Usage of MakeFile/Program execution method
-
