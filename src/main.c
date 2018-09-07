@@ -18,21 +18,22 @@ void main(int argc, char** argv) {
 	// altered in the compression process.
 	FILE* file = fopen(argv[2], "r");
 
-	//
+	// If the command is compact
 	if(strcmp(argv[1], "-c") == 0) {
 		void* current_byte;
-		//fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
+		// fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
 		while(fread(current_byte, 1, 1, file) != EOF) {
-			//TODO: compression algorithm.
-			//magic happens here.
+			// TODO: compression algorithm.
+			// magic happens here.
 		}
-	} 
+	}
+	// If the command is extract
 	else if(strcmp(argv[1], "-e") == 0) {
 		void* current_byte;
-		//fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
+		// fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
 		while(fread(current_byte, 1, 1, file) != EOF) {
-			//TODO: extraction algorithm.
-			//magic happens here.
+			// TODO: extraction algorithm.
+			// magic happens here.
 		}
 	}
 	exit(0);
