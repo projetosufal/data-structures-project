@@ -1,7 +1,7 @@
 /*
 Minimal huffman compression program
 Written by:
-Nicolas Leão, Matheus Artur and Fábio Vinícius.
+Nicolas Leão, Matheus Artur, Luis Cabus and Fábio Vinícius.
 UFAL
 */
 #include <stdio.h>
@@ -37,7 +37,8 @@ void main(int argc, char** argv) {
 		while(fread(current_byte, 1, 1, file) != EOF) {
 			//TODO: extraction algorithm.
 			//magic happens here.
-		}}
-
+		}
+	}
+	fclose(file);
 	exit(0);
 }
