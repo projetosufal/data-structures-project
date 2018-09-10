@@ -31,7 +31,7 @@ void compress(FILE* file) {
 	puts("");
 }
 
-void main(int argc, char **argv) {
+int main(int argc, char **argv) {
 	/* The command that will determine the operation to be executed is passed as the first argument (argv[1]).
 	the available command/operation touples are: (-c, compress), (-e, extract) and (-h, help).
 	The file that will be used is passed as the second argument (argv[2]) when the program is executed. */
@@ -49,7 +49,7 @@ void main(int argc, char **argv) {
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
 			printf("Error! File could not be loaded successfully.\nExiting...\n");
-			exit(1);
+			return 1;
 		}
 		compress(file);
 		fclose(file);
@@ -59,7 +59,7 @@ void main(int argc, char **argv) {
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
 			printf("Error! File could not be loaded successfully.\nExiting...\n");
-			exit(1);
+			return 1;
 		}
 		char *current_byte = malloc(sizeof(char *));
 		//fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
@@ -79,5 +79,5 @@ void main(int argc, char **argv) {
 	else {
 		printf("Invalid command specified, use -h to see a list of available commands.\n");
 	}
-	exit(0);
+	return 0;
 }
