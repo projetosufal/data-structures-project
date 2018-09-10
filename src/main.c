@@ -15,7 +15,7 @@ void compress(FILE* file) {
 	fnode_l *frequency_list = NULL;
 	// fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
 	while(fread(current_byte, 1, 1, file)) {
-		/* Another variable (byte_to_add) that recieves the same value as current_byte is necessary, since the value of current_byte will 
+		/* Another variable (byte_to_add) that receives the same value as current_byte is necessary, since the value of current_byte will 
 		change in every iteration */
 		char* byte_to_add = malloc(sizeof(char *));
 		*byte_to_add = *current_byte;
@@ -32,31 +32,51 @@ void compress(FILE* file) {
 
 void main(int argc, char **argv) {
 	/* The command that will determine the operation to be executed is passed as the first argument (argv[1]).
-	the available command/operation touples are: (-c, compress) and (-e, extract). 
+	the available command/operation touples are: (-c, compress), (-e, extract) and (-h, help).
 	The file that will be used is passed as the second argument (argv[2]) when the program is executed. */
 	
 	// An example of the usage is: ./huffman -c picture.jpg, that will compress the file "picture.jpg"
 
 	/* The file specified will be stored in the variable "file", as read-only to ensure that the original data is not
 	altered in the compression process. */
-	FILE *file = fopen(argv[2], "r");
-	if(file == NULL) {
-		// If the file cannot be accessed, the program exits with error code 1.
-		printf("Error! File could not be loaded successfully.\nExiting...\n");
-		exit(1);
+	
+	if(argv[1] == NULL) {
+		printf("No command specified, use -h to see a list of available commands.\n");
 	}
-
-	if(strcmp(argv[1], "-c") == 0) {
+	else if(strcmp(argv[1], "-c") == 0) {
+		FILE *file = fopen(argv[2], "r");
+		if(file == NULL) {
+			// If the file cannot be accessed, the program exits with error code 1.
+			printf("Error! File could not be loaded successfully.\nExiting...\n");
+			exit(1);
+		}
 		compress(file);
+		fclose(file);
 	} 
 	else if(strcmp(argv[1], "-e") == 0) {
+		FILE *file = fopen(argv[2], "r");
+		if(file == NULL) {
+			// If the file cannot be accessed, the program exits with error code 1.
+			printf("Error! File could not be loaded successfully.\nExiting...\n");
+			exit(1);
+		}
 		char *current_byte = malloc(sizeof(char *));
 		//fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
 		while(fread(current_byte, 1, 1, file)) {
 			//TODO: extraction algorithm.
 			//magic happens here.
 		}
+		fclose(file);
 	}
-	fclose(file);
+	else if(strcmp(argv[1], "-h") == 0) {
+		printf("The syntax to use the program is: ./program <command> <file>\n");
+		printf("Available commands:\n");
+		printf("-c, Compress the specified file.\n");
+		printf("-e, Extract the specified file.\n");
+		printf("Example usage: ./program -c myfile.png\n");
+	}
+	else {
+		printf("Invalid command specified, use -h to see a list of available commands.\n");
+	}
 	exit(0);
 }
