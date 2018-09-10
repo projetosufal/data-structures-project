@@ -10,7 +10,7 @@ UFAL
 #include "linkedlist.h"
 #include "binarytree.h"
 
-#define debug 1
+#define DEBUG 0
 
 // Function to compress a file.
 void compress(FILE* file) {
@@ -28,10 +28,13 @@ void compress(FILE* file) {
 	sort_frequency_list(&frequency_list);
 
 	// Create the file's huffman tree
-	// build_huffman_tree();
+	// build_huffman_tree(&huf_tree, frequency_list);
+
+	// Build the compressed file 
+	// build_compressed_file(huf_tree, );
 
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
-	while(frequency_list != NULL && debug == 1) {
+	while(frequency_list != NULL && DEBUG == 1) {
 		printf("BYTE: %hhx / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
 		frequency_list = frequency_list->next;
 	}
@@ -51,7 +54,7 @@ int main(int argc, char **argv) {
 	*/
 	
 	if(argv[1] == NULL) {
-		printf("No command specified, use \"-h\" to see a list of available commands.\n");
+		printf("Invalid command specified, use ./program -h to see a list of available commands.\n");
 	}
 	else if(strcmp(argv[1], "-c") == 0) {
 		FILE *file = NULL;
@@ -92,7 +95,8 @@ int main(int argc, char **argv) {
 		printf("Example usage: ./program -c myfile.png\n");
 	}
 	else {
-		printf("Invalid command specified, use -h to see a list of available commands.\n");
+		printf("Invalid command specified, use ./program -h to see a list of available commands.\n");
 	}
+	
 	return 0;
 }
