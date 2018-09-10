@@ -26,18 +26,25 @@ void compress(FILE* file) {
 	// Sort the frequency list
 	sort_frequency_list(&frequency_list);
 
+	// Debug loop to print the bytes in hexadecimal and their frequencies.
+	huff_node *aux_list = frequency_list;
+	while(aux_list != NULL && DEBUG == 1) {
+		// printf("BYTE: %hhx / FREQ: %d\n", *((char *)aux_list->value), aux_list->freq);
+		printf("BYTE: %c / FREQ: %d\n", *((char *)aux_list->value), aux_list->freq);
+		aux_list = aux_list->next;
+	}
+
 	// Create the file's huffman tree
-	// build_huffman_tree(&huffman_tree, frequency_list);
+	build_huffman_tree(&huffman_tree, frequency_list);
+
+	// Debug loop to print the tree
+	// if (DEBUG == 1) {
+		print_tree(huffman_tree, 0);
+	// }
 
 	// Build the compressed file 
 	// build_compressed_file(huffman_tree, );
 
-	// Debug loop to print the bytes in hexadecimal and their frequencies.
-	while(frequency_list != NULL && DEBUG == 1) {
-		printf("BYTE: %hhx / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
-		// printf("BYTE: %c / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
-		frequency_list = frequency_list->next;
-	}
 	puts("");
 }
 
