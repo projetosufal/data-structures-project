@@ -12,6 +12,63 @@ typedef struct fnode_l {
 	struct fnode_l *next;
 } fnode_l;
 
+/* Merge left and right lists */
+struct fnode_l *merge(struct fnode_l* l, struct fnode_l* r){ 
+  struct fnode_l *sorty = NULL; 
+
+  if(l == NULL){
+    return(r);     
+  }
+  else if(r==NULL){
+    return(l);     
+  }
+
+  if(l->freq <= r->freq){ 
+    sorty = l; 
+    sorty->next = merge(l->next, r); 
+  } 
+  else{ 
+    sorty = r; 
+    sorty->next = merge(l, r->next); 
+  } 
+  return(sorty); 
+} 
+
+/* keep splitting the list into left/right */  
+void split_n_two(struct fnode_l *h_list, struct fnode_l **left_ref, struct fnode_l **right_ref){
+  struct fnode_l *righto; 
+  struct fnode_l *lefty;
+  
+  lefty = h_list; 
+  righto = h_list->next; 
+
+  while(righto!=NULL){ 
+    righto = righto->next; 
+    if (righto!=NULL){ 
+      lefty = lefty->next; 
+      righto = righto->next; 
+    } 
+  } 
+  *left_ref = h_list; 
+  *right_ref = lefty->next; 
+  lefty->next = NULL; 
+}
+
+/* Sort the frequency with the good 'ol merge sort */
+void start_sort(struct fnode_l** head_ref){ 
+  struct fnode_l *head = *head_ref; 
+  struct fnode_l *l;
+  struct fnode_l *r;
+  if ((head == NULL) || (head->next == NULL)){ 
+    return; 
+  } 
+  split_n_two(head, &l, &r);  
+
+  start_sort(&l); 
+  start_sort(&r);
+  *head_ref = merge(l, r); 
+}
+
 // Function that allocates the memory and returns the address of a new list node.
 node_l *create_node_l(void *item, node_l *next) {
 	node_l *new_node = malloc(sizeof(node_l));
