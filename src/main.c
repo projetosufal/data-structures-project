@@ -41,11 +41,28 @@ int main(int argc, char **argv) {
 	/* The file specified will be stored in the variable "file", as read-only to ensure that the original data is not
 	altered in the compression process. */
 	
+	char cmd[10];
+	char path[255];
+	
 	if(argv[1] == NULL) {
-		printf("No command specified, use -h to see a list of available commands.\n");
+		printf("No command specified, input \"compress\" to compress a file or \"extract\" to extract it:\n");
+		scanf("%s", cmd);
+		printf("Please input the path to the file you want to extract:\n");
+		scanf("%s", path);
 	}
 	else if(strcmp(argv[1], "-c") == 0) {
-		FILE *file = fopen(argv[2], "r");
+		strcpy(cmd, "compress");
+		strcpy(path, argv[2]);
+	}
+	else if(strcmp(argv[1], "-e") == 0) {
+		strcpy(cmd, "extract");
+		strcpy(path, argv[2]);
+	}
+
+	printf("cmd: %s\n", cmd);
+
+	if(strcmp(cmd, "compress") == 0) {
+		FILE *file = fopen(path, "r");
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
 			printf("Error! File could not be loaded successfully.\nExiting...\n");
@@ -54,8 +71,8 @@ int main(int argc, char **argv) {
 		compress(file);
 		fclose(file);
 	} 
-	else if(strcmp(argv[1], "-e") == 0) {
-		FILE *file = fopen(argv[2], "r");
+	else if(strcmp(cmd, "extract") == 0) {
+		FILE *file = fopen(path, "r");
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
 			printf("Error! File could not be loaded successfully.\nExiting...\n");
