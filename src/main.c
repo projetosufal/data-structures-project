@@ -7,19 +7,18 @@ UFAL
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "linkedlist.h"
-#include "binarytree.h"
+#include "hufflist.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 // Function to compress a file.
 void compress(FILE* file) {
 
 	// Pointer to the linked list
-	fnode_l *frequency_list = NULL;
+	huff_node *frequency_list = NULL;
 
 	// Pointer to the huffman tree root
-	huf_tree *huffman_tree = NULL;
+	huff_node *huffman_tree = NULL;
 
 	// Create a frequency list from the bytes in the file
 	create_frequency_list(file, &frequency_list);
@@ -28,10 +27,10 @@ void compress(FILE* file) {
 	sort_frequency_list(&frequency_list);
 
 	// Create the file's huffman tree
-	// build_huffman_tree(&huf_tree, frequency_list);
+	// build_huffman_tree(&huffman_tree, frequency_list);
 
 	// Build the compressed file 
-	// build_compressed_file(huf_tree, );
+	// build_compressed_file(huffman_tree, );
 
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
 	while(frequency_list != NULL && DEBUG == 1) {
