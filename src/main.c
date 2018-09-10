@@ -10,24 +10,30 @@ UFAL
 #include "linkedlist.h"
 #include "binarytree.h"
 
+#define debug 0
+
 // Function to compress a file.
 void compress(FILE* file) {
-	char *current_byte = malloc(sizeof(char *));
-	fnode_l *frequency_list = NULL;
-	// fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
-	while(fread(current_byte, 1, 1, file)) {
-		/* Another variable (byte_to_add) that receives the same value as current_byte is necessary, since the value of current_byte will 
-		change in every iteration */
-		char* byte_to_add = malloc(sizeof(char *));
-		*byte_to_add = *current_byte;
-		add_freq(&frequency_list, (void *)byte_to_add);
-	}
 
-	// Sort the frequency list.
-	start_sort(&frequency_list);
+	// Pointer to the linked list
+	fnode_l *frequency_list = NULL;
+
+	// Pointer to the huffman tree root
+	huf_tree *huffman_tree = NULL;
+
+	// Create a frequency list from the bytes in the file
+	create_frequency_list(file, &frequency_list);
+
+	// Sort the frequency list
+	sort_frequency_list(&frequency_list);
+
+	// Create the file's huffman tree
+	// build_huffman_tree();
 	
+
+
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
-	while(frequency_list != NULL) {
+	while(frequency_list != NULL && debug == 1) {
 		printf("BYTE: %hhx / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
 		frequency_list = frequency_list->next;
 	}
@@ -35,14 +41,16 @@ void compress(FILE* file) {
 }
 
 int main(int argc, char **argv) {
-	/* The command that will determine the operation to be executed is passed as the first argument (argv[1]).
+	/* 
+	The command that will determine the operation to be executed is passed as the first argument (argv[1]).
 	the available command/operation touples are: (-c, compress), (-e, extract) and (-h, help).
-	The file that will be used is passed as the second argument (argv[2]) when the program is executed. */
+	The file that will be used is passed as the second argument (argv[2]) when the program is executed. 
 	
-	// An example of the usage is: ./huffman -c picture.jpg, that will compress the file "picture.jpg"
+	An example of the usage is: ./huffman -c picture.jpg, that will compress the file "picture.jpg"
 
-	/* The file specified will be stored in the variable "file", as read-only to ensure that the original data is not
-	altered in the compression process. */
+	The file specified will be stored in the variable "file", as read-only to ensure that the original data is not
+	altered in the compression process. 
+	*/
 	
 	char cmd[10];
 	char path[255];
