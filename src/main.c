@@ -10,7 +10,7 @@ UFAL
 #include "linkedlist.h"
 #include "binarytree.h"
 
-#define debug 0
+#define debug 1
 
 // Function to compress a file.
 void compress(FILE* file) {
@@ -29,8 +29,6 @@ void compress(FILE* file) {
 
 	// Create the file's huffman tree
 	// build_huffman_tree();
-	
-
 
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
 	while(frequency_list != NULL && debug == 1) {
@@ -52,28 +50,14 @@ int main(int argc, char **argv) {
 	altered in the compression process. 
 	*/
 	
-	char cmd[10];
-	char path[255];
-	
 	if(argv[1] == NULL) {
-		printf("No command specified, input \"-c\" to compress a file or \"-e\" to extract it:\n");
-		scanf("%s", cmd);
-		printf("Please input the path to the file you want to extract:\n");
-		scanf("%s", path);
+		printf("No command specified, use \"-h\" to see a list of available commands.\n");
 	}
 	else if(strcmp(argv[1], "-c") == 0) {
-		strcpy(cmd, "-c");
-		strcpy(path, argv[2]);
-	}
-	else if(strcmp(argv[1], "-e") == 0) {
-		strcpy(cmd, "-e");
-		strcpy(path, argv[2]);
-	}
-
-	printf("cmd: %s\n", cmd);
-
-	if(strcmp(cmd, "-c") == 0) {
-		FILE *file = fopen(path, "r");
+		FILE *file = NULL;
+		if(argv[2] != NULL) {
+			file = fopen(argv[2], "r");
+		}
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
 			printf("Error! File could not be loaded successfully.\nExiting...\n");
@@ -82,8 +66,11 @@ int main(int argc, char **argv) {
 		compress(file);
 		fclose(file);
 	} 
-	else if(strcmp(cmd, "-e") == 0) {
-		FILE *file = fopen(path, "r");
+	else if(strcmp(argv[1], "-e") == 0) {
+		FILE *file = NULL;
+		if(argv[2] != NULL) {
+			file = fopen(argv[2], "r");
+		}
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
 			printf("Error! File could not be loaded successfully.\nExiting...\n");
