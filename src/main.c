@@ -23,7 +23,9 @@ void compress(FILE* file) {
 		add_freq(&frequency_list, (void *)byte_to_add);
 	}
 
+	// Sort the frequency list.
 	start_sort(&frequency_list);
+	
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
 	while(frequency_list != NULL) {
 		printf("BYTE: %hhx / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
@@ -46,23 +48,23 @@ int main(int argc, char **argv) {
 	char path[255];
 	
 	if(argv[1] == NULL) {
-		printf("No command specified, input \"compress\" to compress a file or \"extract\" to extract it:\n");
+		printf("No command specified, input \"-c\" to compress a file or \"-e\" to extract it:\n");
 		scanf("%s", cmd);
 		printf("Please input the path to the file you want to extract:\n");
 		scanf("%s", path);
 	}
 	else if(strcmp(argv[1], "-c") == 0) {
-		strcpy(cmd, "compress");
+		strcpy(cmd, "-c");
 		strcpy(path, argv[2]);
 	}
 	else if(strcmp(argv[1], "-e") == 0) {
-		strcpy(cmd, "extract");
+		strcpy(cmd, "-e");
 		strcpy(path, argv[2]);
 	}
 
 	printf("cmd: %s\n", cmd);
 
-	if(strcmp(cmd, "compress") == 0) {
+	if(strcmp(cmd, "-c") == 0) {
 		FILE *file = fopen(path, "r");
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
@@ -72,7 +74,7 @@ int main(int argc, char **argv) {
 		compress(file);
 		fclose(file);
 	} 
-	else if(strcmp(cmd, "extract") == 0) {
+	else if(strcmp(cmd, "-e") == 0) {
 		FILE *file = fopen(path, "r");
 		if(file == NULL) {
 			// If the file cannot be accessed, the program exits with error code 1.
