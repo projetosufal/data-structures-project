@@ -68,7 +68,7 @@ void add_freq(fnode_l **head, void *item) {
 }
 
 /* Merge left and right lists */
-struct fnode_l *merge(struct fnode_l *l, struct fnode_l *r){
+fnode_l *merge(struct fnode_l *l, struct fnode_l *r){
 	struct fnode_l *sorty = NULL;
 
 	if(l == NULL){

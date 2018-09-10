@@ -23,6 +23,7 @@ void compress(FILE* file) {
 		add_freq(&frequency_list, (void *)byte_to_add);
 	}
 
+	start_sort(&frequency_list);
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
 	while(frequency_list != NULL) {
 		printf("BYTE: %hhx / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
