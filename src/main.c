@@ -35,6 +35,7 @@ void compress(FILE* file) {
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
 	while(frequency_list != NULL && DEBUG == 1) {
 		printf("BYTE: %hhx / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
+		// printf("BYTE: %c / FREQ: %d\n", *((char *)frequency_list->value), frequency_list->freq);
 		frequency_list = frequency_list->next;
 	}
 	puts("");
@@ -46,14 +47,18 @@ int main(int argc, char **argv) {
 	the available command/operation touples are: (-c, compress), (-e, extract) and (-h, help).
 	The file that will be used is passed as the second argument (argv[2]) when the program is executed. 
 	
-	An example of the usage is: ./huffman -c picture.jpg, that will compress the file "picture.jpg"
+	An example of the usage is: ./program -c picture.jpg, that will compress the file "picture.jpg"
 
-	The file specified will be stored in the variable "file", as read-only to ensure that the original data is not
+	The file specified will be stored in the variable "file", as read-only, to ensure that the original data is not
 	altered in the compression process. 
 	*/
 	
-	if(argv[1] == NULL) {
-		printf("Invalid command specified, use ./program -h to see a list of available commands.\n");
+	if(argv[1] == NULL || strcmp(argv[1], "-h") == 0) {
+		printf("\nThe correct syntax to use the program is: ./program <command> <file>\n");
+		printf("Available commands are:\n");
+		printf("-c, Compress the specified file.\n");
+		printf("-e, Extract the specified file.\n");
+		printf("Example usage: ./program -c myfile.png\n\n");
 	}
 	else if(strcmp(argv[1], "-c") == 0) {
 		FILE *file = NULL;
@@ -85,13 +90,6 @@ int main(int argc, char **argv) {
 			//magic happens here.
 		}
 		fclose(file);
-	}
-	else if(strcmp(argv[1], "-h") == 0) {
-		printf("The syntax to use the program is: ./program <command> <file>\n");
-		printf("Available commands:\n");
-		printf("-c, Compress the specified file.\n");
-		printf("-e, Extract the specified file.\n");
-		printf("Example usage: ./program -c myfile.png\n");
 	}
 	else {
 		printf("Invalid command specified, use ./program -h to see a list of available commands.\n");
