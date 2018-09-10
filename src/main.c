@@ -8,6 +8,7 @@ UFAL
 #include <stdlib.h>
 #include <string.h>
 #include "linkedlist.h"
+#include "binarytree.h"
 
 // Function to compress a file.
 void compress(FILE* file) {
