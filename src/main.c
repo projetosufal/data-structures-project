@@ -8,8 +8,9 @@ UFAL
 #include <stdlib.h>
 #include <string.h>
 #include "hufflist.h"
+#include "hufftree.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 // Function to compress a file.
 void compress(FILE* file) {
@@ -29,10 +30,11 @@ void compress(FILE* file) {
 	// Debug loop to print the bytes in hexadecimal and their frequencies.
 	huff_node *aux_list = frequency_list;
 	while(aux_list != NULL && DEBUG == 1) {
-		// printf("BYTE: %hhx / FREQ: %d\n", *((char *)aux_list->value), aux_list->freq);
-		printf("BYTE: %c / FREQ: %d\n", *((char *)aux_list->value), aux_list->freq);
+		printf("BYTE: %hhx / FREQ: %d\n", *((char *)aux_list->value), aux_list->freq);
+		// printf("BYTE: %c / FREQ: %d\n", *((char *)aux_list->value), aux_list->freq);
 		aux_list = aux_list->next;
 	}
+	puts("");
 
 	// Create the file's huffman tree
 	build_huffman_tree(&huffman_tree, frequency_list);
@@ -59,6 +61,8 @@ int main(int argc, char **argv) {
 	The file specified will be stored in the variable "file", as read-only, to ensure that the original data is not
 	altered in the compression process. 
 	*/
+
+	system("clear");
 	
 	if(argv[1] == NULL || strcmp(argv[1], "-h") == 0) {
 		printf("\nThe correct syntax to use the program is: ./program <command> <file>\n");

@@ -52,82 +52,6 @@ void frequency_node(huff_node **head, void *item) {
 	}
 }
 
-// void inserir_ordenado(huff_node **head, huff_node *new_root) {
-// 	huff_node *aux = NULL;
-
-	// aux = *head;
-	// while (aux->next != NULL && aux->next->freq < new_root->freq) {
-	// 	aux = aux->next;
-	// }
-
-// 	huff_node *new_node = NULL;
-// 	new_node = (huff_node *) malloc(sizeof(huff_node));
-// 	new_node->item = item;
-// 	new_node->next = aux->next;
-// 	aux->next = new_node;
-// }
-
-void build_huffman_tree(huff_node **huffman_tree, huff_node *frequency_list) {
-
-	if (frequency_list == NULL || frequency_list->next == NULL) {
-		*huffman_tree = frequency_list;
-		return;
-	}
-
-	printf("head da lista %p valor: %c e frequencia: %d\n", frequency_list, *((char *)frequency_list->value), frequency_list->freq);
-	// printf("head da lista %p tem frequencia: %d\n", frequency_list, frequency_list->freq);
-
-	huff_node *smallest_node = frequency_list;
-	huff_node *smallest_node2 = frequency_list->next;
-	printf("menores %p valor %c e %p valor %c\n", smallest_node, (char)smallest_node->value, smallest_node2, (char)smallest_node2->value);
-
-	// remove the two nodes from the list, jumping the head to the 3rd item
-	frequency_list = smallest_node2->next;
-
-	// create a new node, sum the two nodes frequencies, point left to the smallest, right to the largest and put it into the list
-	huff_node *new_node = create_huff_node("@", smallest_node->freq + smallest_node2->freq, frequency_list, smallest_node, smallest_node2);
-
-	frequency_list = new_node; // aqui insere desordenado, mas precisa inserir ordendo
-
-	// find the place to insert ordered the new node into the list
-	// huff_node *aux_node = frequency_list;
-	// while (aux_node->next != NULL && aux_node->next->freq < new_node->freq) {
-	// 	aux_node = aux_node->next;
-	// }
-
-	// if (aux_node == NULL) {
-	// 	frequency_list = new_node;
-	// 	printf("Achei freq_list NULL\n");
-	// } else {
-	// 	while (aux_node->next != NULL && aux_node->next->freq < new_node->freq) {
-	// 		aux_node = aux_node->next;
-	// 	}
-	// }
-
-	// // 
-	// new_node->next = aux_node->next;
-	// aux_node->next = new_node;
-
-	// sort_frequency_list(frequency_list);
-
-	build_huffman_tree(huffman_tree, frequency_list);
-}
-
-void print_tree(huff_node *huffman_tree, int nivel) {
-
-	if (huffman_tree == NULL) {
-		printf(" () ");
-		return;
-	} else {
-		printf(" ( %c ", (int)huffman_tree->value);
-	}
-
-	print_tree(huffman_tree->left, ++nivel);
-	print_tree(huffman_tree->right, ++nivel);
-
-	printf(") ");
-}
-
 
 
 /* Merge left and right lists */
@@ -186,8 +110,6 @@ void sort_frequency_list(struct huff_node **head_ref){
 	sort_frequency_list(&r);
 	*head_ref = merge(l, r);
 }
-
-
 
 void create_frequency_list(FILE *file, huff_node **frequency_list) {
 	char *current_byte = malloc(sizeof(char *));
