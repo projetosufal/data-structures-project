@@ -1,37 +1,8 @@
-/*
-Minimal huffman compression program
-Written by:
-Nicolas Leão, Matheus Artur, Luis Cabus and Fábio Vinícius.
-UFAL
-*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "hufflist.h"
-#include "hufftree.h"
-#define DEBUG 0
-
-void compress(FILE* file) {
-	huff_node *frequency_list = NULL;
-	huff_node * huffman_tree = NULL;
-
-	// Create a frequency list from the bytes in the file and sort it.
-	create_frequency_list(file, &frequency_list);
-	sort_frequency_list(&frequency_list);
-
-	// Debug loop to print the bytes in hexadecimal and their frequencies.
-	huff_node *aux_list = frequency_list;
-	while(aux_list != NULL && DEBUG == 1) {
-		printf("BYTE: %hhx / FREQ: %d\n", *((char *)aux_list->value), aux_list->freq);
-		aux_list = aux_list->next;
-	}
-	puts("");
-
-	// Create the file's huffman tree
-	build_huffman_tree(&huffman_tree, frequency_list);
-
-	puts("");
-}
+#include "compress.h"
+#define DEBUG 1
 
 int main(int argc, char **argv) {
 	/* 
