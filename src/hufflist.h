@@ -52,6 +52,18 @@ void frequency_node(huff_node **head, void *item) {
 	}
 }
 
+void create_frequency_list(FILE *file, huff_node **frequency_list) {
+	char *current_byte = malloc(sizeof(char *));
+
+	// fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
+	while(fread(current_byte, 1, 1, file)) {
+		// Another variable (byte_to_add) that receives the same value as current_byte is necessary, since the value of current_byte will change in every iteration
+		char* byte_to_add = malloc(sizeof(char *));
+		*byte_to_add = *current_byte;
+		frequency_node(frequency_list, (void *)byte_to_add);
+	}
+}
+
 
 
 /* Merge left and right lists */
@@ -109,18 +121,6 @@ void sort_frequency_list(struct huff_node **head_ref){
 	sort_frequency_list(&l);
 	sort_frequency_list(&r);
 	*head_ref = merge(l, r);
-}
-
-void create_frequency_list(FILE *file, huff_node **frequency_list) {
-	char *current_byte = malloc(sizeof(char *));
-
-	// fread will read one byte at a time from the "file" variable and store it in the "current_byte" variable.
-	while(fread(current_byte, 1, 1, file)) {
-		// Another variable (byte_to_add) that receives the same value as current_byte is necessary, since the value of current_byte will change in every iteration
-		char* byte_to_add = malloc(sizeof(char *));
-		*byte_to_add = *current_byte;
-		frequency_node(frequency_list, (void *)byte_to_add);
-	}
 }
 
 #endif
