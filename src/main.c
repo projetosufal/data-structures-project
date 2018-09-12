@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "compress.h"
-#define DEBUG 1
 
 int main(int argc, char **argv) {
 	/* 
