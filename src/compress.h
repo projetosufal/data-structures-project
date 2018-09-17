@@ -7,7 +7,7 @@
 
 /* Function to create a table with the frequencies of each byte of the file as the value. */
 int *create_table(FILE* file, int* table) {
-	int *current_byte = malloc(sizeof(char *));
+	unsigned char *current_byte = malloc(sizeof(char *));
 
 	while(fscanf(file, "%c", current_byte) != EOF) {
 		table[*current_byte] += 1;
@@ -21,7 +21,7 @@ void compress(FILE *file) {
 	huff_node *head = create_list(table);
 	sort_frequency(&head);
 
-	DEBUG{
+	DEBUG {
 	  while(head != NULL) {
 	    printf("BYTE: %c FREQ: %d\n", *((char *)head->value), head->freq);
 	    head = head->next;

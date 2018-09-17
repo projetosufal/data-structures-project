@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "compress.h"
+#include "extract.h"
 
 int main(int argc, char **argv) {
 	/* 
@@ -42,9 +43,7 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 		char *current_byte = malloc(sizeof(char *));
-		while(fread(current_byte, 1, 1, file)) {
-			//TODO: extraction algorithm.
-		}
+		extract(file);
 		fclose(file);
 	}
 	else {
