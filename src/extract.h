@@ -31,5 +31,4 @@ void extract(FILE* file) {
 		printf("THRASH: %d TREE_SIZE: %d\n", thrash, tree_size);
 	}
 }
-
 #endif
