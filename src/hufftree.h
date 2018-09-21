@@ -78,7 +78,7 @@ void print_tree(huff_node *huffman_tree, int nivel) {
 		printf(" () ");
 		return;
 	} else {
-		printf(" ( %d ", (int)huffman_tree->freq);
+		printf(" ( %d %c", (int)huffman_tree->freq, *((char*)huffman_tree->value));
 		// printf(" ( %c ", (char)huffman_tree->value);
 		// printf(" ( %hhx ", (char)huffman_tree->value);
 	}
