@@ -1,6 +1,8 @@
 #ifndef _HUFFLIST_H_
 #define _HUFFLIST_H_
 
+#define DEBUG if(1)
+
 typedef struct huff_node {
 	void *value;
 	int freq;
@@ -8,7 +10,6 @@ typedef struct huff_node {
 	struct huff_node *left;
 	struct huff_node *right;
 } huff_node;
-
 
 /* Function that allocates the memory and returns the address of a new huff frequency list node. */
 huff_node *create_huff_node(void *item, int freq, huff_node *next, huff_node *left, huff_node *right) {
@@ -23,6 +24,57 @@ huff_node *create_huff_node(void *item, int freq, huff_node *next, huff_node *le
 
 void add_to_head(huff_node **head, void *item, int freq) {
 	*head = create_huff_node(item, freq, *head, NULL, NULL);
+}
+
+huff_node *add_to_tail(huff_node *head, void *item, int freq) {
+	if(head == NULL) {
+		return create_huff_node(item, freq, NULL, NULL, NULL);
+	}
+
+	huff_node *old_head = head;
+	while(head != NULL) {
+		if(head->next == NULL) {
+			head->next = create_huff_node(item, freq, NULL, NULL, NULL);
+			return old_head;
+		}
+		head = head->next;
+	}
+}
+
+huff_node *remove_from_tail(huff_node *head) {
+	if(head == NULL || head->next == NULL) {
+		return NULL;
+	}
+
+	huff_node *old_head = head;
+	while(head != NULL) {
+		if(head->next->next == NULL) {
+			free(head->next);
+			head->next = NULL;
+			return old_head;
+		}
+		head = head->next;
+	}
+}
+
+// Function that creates a string with the contents of a list.
+void to_string(huff_node *node, char **destination) {
+	int current_size = 255;
+	char *str = malloc(current_size * sizeof(char));
+	int i = 0;
+	while(node != NULL) {
+		if(i == current_size) {
+			current_size *= 2;
+			str = realloc(str, current_size * sizeof(char));
+		}
+		str[i] = *((char *)node->value);
+		node = node->next;
+		i++;
+	}
+	str[i] = '\0';
+	*destination = realloc(*destination, current_size * sizeof(char));
+	strcpy(*destination, str);
+	free(str);
 }
 
 /* Function to create a "linked list" using the elements of an integer array as the frequency 

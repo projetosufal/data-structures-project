@@ -3,13 +3,8 @@
 #include <math.h>
 #include "hufflist.h"
 #include "hufftree.h"
+#include "compress.h"
 #include <stdbool.h>
-
-// Function that returns the i'th bit from a byte.
-bool get_bit(unsigned char c, int i) {
-	unsigned char aux = 1 << i;
-	return aux & c;
-}
 
 // Recursive function to recreate a tree based on it's pre-order array
 huff_node *recreate_tree(char *arr, int *visited, int i) {
@@ -17,8 +12,8 @@ huff_node *recreate_tree(char *arr, int *visited, int i) {
 	visited[i] = 1;
 	/* 
 	If the current position in the array is not '*', the current position can only be:
-	1. A leaf of the tree;
-	2. A backslash escaping a leaf of the tree; 
+	1. A leaf node;
+	2. A backslash escaping a leaf node; 
 	*/
 	if(arr[i] != '*') {
 		if(arr[i] != '\\') {
@@ -55,7 +50,14 @@ huff_node *recreate_tree(char *arr, int *visited, int i) {
 	}
 }
 
-void extract(FILE* file) {
+void extract(char *filename) {
+	// Load the file that will be extracted
+	FILE *file = fopen(filename, "r");
+	if(file == NULL) {
+		printf("Error! File could not be loaded successfully.\nExiting...\n");
+		return;
+	}
+
 	// The two first bytes of the file provides us the information needed to build the tree that will be used
 	unsigned char header[2];
 	int thrash = 0, tree_size = 0;
@@ -84,7 +86,8 @@ void extract(FILE* file) {
 	
 	DEBUG {
 		printf("THRASH: %d TREE_SIZE: %d\n", thrash, tree_size);
-		print_tree(tree, 0);
+		print_tree(tree);
 	}
+	fclose(file);
 }
 #endif

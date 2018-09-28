@@ -22,29 +22,18 @@ int main(int argc, char **argv) {
 		printf("Example usage: ./program -c myfile.png\n\n");
 	}
 	else if(strcmp(argv[1], "-c") == 0) {
-		FILE *file = NULL;
-		if(argv[2] != NULL) {
-			file = fopen(argv[2], "r");
-		}
-		if(file == NULL) {
-			printf("Error! File could not be loaded successfully.\nExiting...\n");
+		if(argv[2] == NULL) {
+			printf("Error! No file specified.\nExiting...\n");
 			return 1;
 		}
-		compress(file);
-		fclose(file);
+		compress(argv[2]);
 	} 
 	else if(strcmp(argv[1], "-e") == 0) {
-		FILE *file = NULL;
-		if(argv[2] != NULL) {
-			file = fopen(argv[2], "r");
-		}
-		if(file == NULL) {
-			printf("Error! File could not be loaded successfully.\nExiting...\n");
+		if(argv[2] == NULL) {
+			printf("Error! No file specified.\nExiting...\n");
 			return 1;
 		}
-		char *current_byte = malloc(sizeof(char *));
-		extract(file);
-		fclose(file);
+		extract(argv[2]);
 	}
 	else {
 		printf("Invalid command specified, use ./program -h to see a list of available commands.\n");
