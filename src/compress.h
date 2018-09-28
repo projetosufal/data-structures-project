@@ -35,36 +35,89 @@ void create_header(int thrash_size, int tree_size, char *header) {
 	}
 }
 
-void create_compressed_file(char *filename, huff_node *root) {
+void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 	int filename_length = strlen(filename);
-	char compacted_filename[filename_length+5];
-	strcpy(compacted_filename, filename);
-	compacted_filename[filename_length] = '.';
-	compacted_filename[filename_length+1] = 'h';
-	compacted_filename[filename_length+2] = 'u';
-	compacted_filename[filename_length+3] = 'f';
-	compacted_filename[filename_length+4] = 'f';
-	compacted_filename[filename_length+5] = '\0';
-	FILE *file = fopen(compacted_filename, "r"); 
-	if(file != NULL) {
-		printf("Error! Decompressed file already exists.\nExiting...\n");
+	char compressed_filename[filename_length+5];
+	strcpy(compressed_filename, filename);
+	compressed_filename[filename_length] = '.';
+	compressed_filename[filename_length+1] = 'h';
+	compressed_filename[filename_length+2] = 'u';
+	compressed_filename[filename_length+3] = 'f';
+	compressed_filename[filename_length+4] = 'f';
+	compressed_filename[filename_length+5] = '\0';
+
+	FILE *compressed_file = fopen(compressed_filename, "r"); 
+	if(compressed_file != NULL) {
+		printf("Error! Compressed file already exists.\nExiting...\n");
 		return;
 	}
-	file = fopen(compacted_filename, "w");
-	int thrash_size = get_thrash_size(filename, root);
+	compressed_file = fopen(compressed_filename, "w");
+	
+	// Empty header that will be overwritten when the real thrash size is discovered.
+	char *header = calloc(2, sizeof(char));
+	create_header(0, 0, header);
+	fprintf(compressed_file, "%c%c", header[0], header[1]);
+
+	write_preorder(compressed_file, root);
+	unsigned char byte_to_search;
+	unsigned char *current_byte = calloc(1, sizeof(char));
+	int bit_i = 0, thrash_size = 0, bytes = 0;
+
+	// We go back to the beginning of the file and start the compression process.
+	rewind(file);
+
+	// This while loop runs once for each byte in the original file.
+	while(fscanf(file, "%c", &byte_to_search) != EOF) {
+		char *string_to_add = malloc(sizeof(char));
+		search_tree(root, byte_to_search, NULL, &string_to_add);
+		
+		int i = 0;
+		while(i < strlen(string_to_add)) {
+			/*
+			Since we can only write a byte at a time, the program writes everytime the "bit_i" counter hits 8,
+			then the counter is reset to 0.
+			*/
+			if(bit_i == 8) {
+				fprintf(compressed_file, "%c", *current_byte);
+				current_byte = calloc(1, sizeof(char));
+				bytes += 1;
+				bit_i = 0;
+			}
+			if(string_to_add[i] == '1') {
+				*current_byte = set_bit(*current_byte, bit_i);
+			}
+			thrash_size += 1;
+			bit_i += 1;
+			i += 1;
+		}
+
+	}
+	fprintf(compressed_file, "%c", current_byte);
+
+	// The compressed file needs to be rewinded so that we can update the header with the new thrash size.
+	rewind(compressed_file);
+
+	// Calculate the thrash size.
+	thrash_size = 8 - thrash_size % 8;
+
+	// Update the header
 	int tree_size = 0;
 	get_tree_size(root, &tree_size);
-	char *header = calloc(2, sizeof(char));
-	
 	create_header(thrash_size, tree_size, header);
-	for(int i = 0; i < 8; i++) {
-		printf("%d", get_bit(header[0], i));
+	fprintf(compressed_file, "%c%c", header[0], header[1]);
+
+	DEBUG {
+		printf("New file has %d bytes.\n", bytes+1);
+		for(int i = 0; i < 8; i++) {
+			printf("%d", get_bit(header[0], i));
+		}
+		for(int i = 0; i < 8; i++) {
+			printf("%d", get_bit(header[1], i));
+		}
+		puts("");
 	}
-	for(int i = 0; i < 8; i++) {
-		printf("%d", get_bit(header[1], i));
-	}
-	puts("");
-	fclose(file);
+	printf("Done.\n");
+	fclose(compressed_file);
 }
 
 void compress(char *filename) {
@@ -88,17 +141,6 @@ void compress(char *filename) {
 	
 	build_huffman_tree(&huffman_tree, head);
 	
-	create_compressed_file(filename, huffman_tree);
-
-	DEBUG {
-		print_tree(huffman_tree);
-		puts("");
-	}
-
-	// create a new file, insert header (tree size, tree preorder)
-
-	// parse the file bits and start compressing using the tree
-
 	DEBUG {
 	  while(head != NULL) {
 	    printf("BYTE: %c FREQ: %d\n", *((char *)head->value), head->freq);
@@ -106,6 +148,13 @@ void compress(char *filename) {
 	  }
 	}
 
+	DEBUG {
+		print_tree(huffman_tree);
+		puts("");
+	}
+
+	// create a new file, insert header (tree size, tree preorder) and start compressing using the tree
+	create_compressed_file(filename, file, huffman_tree);
 	fclose(file);
 }
 #endif

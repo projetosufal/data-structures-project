@@ -45,7 +45,7 @@ void build_huffman_tree(huff_node **huffman_tree, huff_node *frequency_list) {
 	frequency_list = smallest_node2->next;
 
 	// create a new node, sum the two nodes frequencies, point left to the smallest, right to the largest and put it into the list
-	huff_node *new_node = create_huff_node("@", smallest_node->freq + smallest_node2->freq, frequency_list, smallest_node, smallest_node2);
+	huff_node *new_node = create_huff_node("*", smallest_node->freq + smallest_node2->freq, frequency_list, smallest_node, smallest_node2);
 
 	// frequency_list = new_node; // aqui insere desordenado, mas precisa inserir ordendo
 
@@ -128,21 +128,19 @@ void get_tree_size(huff_node *root, int *size) {
 	get_tree_size(root->right, size);
 }
 
-// Function to calculate how many bits of thrash will be left on the last byte.
-int get_thrash_size(char *filename, huff_node *root) {
-	FILE *file = fopen(filename, "r");
-	int thrash_size = 0;
-	unsigned char *current_byte = malloc(sizeof(char));
-
-	while(fscanf(file, "%c", current_byte) != EOF) {
-		// Placeholder malloc size, will be realloc'd when the function "to_string" is called inside "search_tree".
-		char *result = malloc(sizeof(char));
-		bool finished = false;
-		search_tree(root, *current_byte, NULL, &result);
-		thrash_size += strlen(result);
-		free(result);
+void write_preorder(FILE *file, huff_node *root) {
+	if(root == NULL) {
+		return;
 	}
-	return 8 - thrash_size % 8;
+	if(root->left == NULL && root->right == NULL &&
+	   *((char *)root->value) == '*' || *((char *)root->value) == '\\') {
+		fprintf(file, "\\%c", *((char *)root->value));	
+	}
+	else {
+		fprintf(file, "%c", *((char *)root->value));
+	}
+	write_preorder(file, root->left);
+	write_preorder(file, root->right);
 }
 
 void print_tree(huff_node *huffman_tree) {
