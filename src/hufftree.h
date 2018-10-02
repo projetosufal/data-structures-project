@@ -20,11 +20,11 @@
 
 // Function that returns the i'th bit from a byte.
 bool get_bit(unsigned char c, int i) {
-	return (1 << 7-i) & c;
+	return (1 << (7-i)) & c;
 }
 
 unsigned char set_bit(unsigned char c, int i) {
-	return (1 << 7-i) | c;
+	return (1 << (7-i)) | c;
 }
 
 void build_huffman_tree(huff_node **huffman_tree, huff_node *frequency_list) {

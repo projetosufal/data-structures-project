@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 // Recursive function to recreate a tree based on it's pre-order array
-huff_node *recreate_tree(char *arr, int *visited, int i) {
+huff_node *recreate_tree(unsigned char *arr, int *visited, int i) {
 	// We need to mark the current position of the array as visited.
 	visited[i] = 1;
 	/* 
