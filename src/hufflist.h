@@ -1,7 +1,7 @@
 #ifndef _HUFFLIST_H_
 #define _HUFFLIST_H_
 
-#define DEBUG if(1)
+#define DEBUG if(0)
 
 typedef struct huff_node {
 	void *value;

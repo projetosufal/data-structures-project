@@ -58,7 +58,9 @@ void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrash
 	
 	printf("CURRENT %d THRASHLESS %d\n", current_bit, thrashless_size);
 	while(current_bit < thrashless_size) {
-		printf("%d", get_bit(current_byte, bit_i));
+		DEBUG {
+			printf("%d", get_bit(current_byte, bit_i));
+		}
 		if(bit_i == 8) {
 			fscanf(original_file, "%c", &current_byte);
 			bit_i = 0;
@@ -71,13 +73,15 @@ void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrash
 			current_node = current_node->right;
 		}
 		else {
-			current_node = current_node->right;
+			current_node = current_node->left;
 		}
 
 		bit_i += 1;
 		current_bit += 1;
 	}
-	puts("");
+	DEBUG {
+		puts("");
+	}
 	printf("Done.\n");
 }
 
@@ -138,7 +142,7 @@ void extract(char *filename) {
 	}
 
 	// Recreate the extracted file using the tree
-	create_extracted_file(extracted, file, ((file_size - 2 - tree_size) * 8) - thrash_size, tree);
+	create_extracted_file(extracted, file, ((file_size - 2 - tree_size) * 8) - thrash_size+1, tree);
 	
 	DEBUG {
 		printf("FILESIZE: %ld THRASH: %d TREE_SIZE: %d\n", file_size, thrash_size, tree_size);

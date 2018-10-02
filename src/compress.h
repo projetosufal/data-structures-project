@@ -83,12 +83,10 @@ void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 				current_byte = calloc(1, sizeof(char));
 				bytes += 1;
 				bit_i = 0;
-				printf(" ");
 			}
 			if(string_to_add[i] == '1') {
 				*current_byte = set_bit(*current_byte, bit_i);
 			}
-			printf("%d", get_bit(*current_byte, bit_i));
 			current_bit += 1;
 			thrash_size += 1;
 			bit_i += 1;
