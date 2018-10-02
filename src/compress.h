@@ -15,24 +15,25 @@ void create_table(FILE *file, int *table) {
 
 // Function to change the contents of the "header" array using set_bit() to match the desired header configuration.
 void create_header(int thrash_size, int tree_size, char *header) {
-	for(int i = 2; i >= 0; i--) {
+	for(int i = 2; i >= 0; --i) {
 		if(thrash_size % 2) {
 			header[0] = set_bit(header[0], i);
 		}
 		thrash_size /= 2;
 	}
-	for(int i = 7; i >= 0; i--) {
+	for(int i = 7; i >= 0; --i) {
 		if(tree_size % 2) {
 			header[1] = set_bit(header[1], i);
 		}
 		tree_size /= 2;
 	}
-	for(int i = 7; i >= 3; i--) {
+	for(int i = 7; i >= 3; --i) {
 		if(tree_size % 2) {
 			header[0] = set_bit(header[0], i);
 		}
 		tree_size /= 2;
 	}
+	puts("");
 }
 
 void create_compressed_file(char *filename, FILE *file, huff_node *root) {
@@ -46,7 +47,7 @@ void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 	compressed_filename[filename_length+4] = 'f';
 	compressed_filename[filename_length+5] = '\0';
 
-	FILE *compressed_file = fopen(compressed_filename, "r"); 
+	FILE *compressed_file = fopen(compressed_filename, "r");
 	if(compressed_file != NULL) {
 		printf("Error! Compressed file already exists.\nExiting...\n");
 		return;
@@ -61,13 +62,13 @@ void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 	write_preorder(compressed_file, root);
 	unsigned char byte_to_search;
 	unsigned char *current_byte = calloc(1, sizeof(char));
-	int bit_i = 0, thrash_size = 0, bytes = 0;
-
+	short int bit_i = 0, thrash_size = 0, bytes = 0, current_bit = 0;
+	long max_size = 9999999999;
 	// We go back to the beginning of the file and start the compression process.
 	rewind(file);
 
 	// This while loop runs once for each byte in the original file.
-	while(fscanf(file, "%c", &byte_to_search) != EOF) {
+	while(fscanf(file, "%c", &byte_to_search) != EOF && current_bit < max_size) {
 		char *string_to_add = malloc(sizeof(char));
 		search_tree(root, byte_to_search, NULL, &string_to_add);
 		
@@ -82,17 +83,20 @@ void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 				current_byte = calloc(1, sizeof(char));
 				bytes += 1;
 				bit_i = 0;
+				printf(" ");
 			}
 			if(string_to_add[i] == '1') {
 				*current_byte = set_bit(*current_byte, bit_i);
 			}
+			printf("%d", get_bit(*current_byte, bit_i));
+			current_bit += 1;
 			thrash_size += 1;
 			bit_i += 1;
 			i += 1;
 		}
 
 	}
-	fprintf(compressed_file, "%c", current_byte);
+	fprintf(compressed_file, "%c", *current_byte);
 
 	// The compressed file needs to be rewinded so that we can update the header with the new thrash size.
 	rewind(compressed_file);
@@ -106,13 +110,16 @@ void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 	create_header(thrash_size, tree_size, header);
 	fprintf(compressed_file, "%c%c", header[0], header[1]);
 
+	fclose(compressed_file);
+	fopen(compressed_filename, "r");
 	DEBUG {
-		printf("New file has %d bytes.\n", bytes+1);
-		for(int i = 0; i < 8; i++) {
-			printf("%d", get_bit(header[0], i));
-		}
-		for(int i = 0; i < 8; i++) {
-			printf("%d", get_bit(header[1], i));
+		char mybyte;
+		
+		while(fscanf(compressed_file, "%c", &mybyte) != EOF) {
+			for(int i = 0; i < 8; i++) {
+				printf("%d", get_bit(mybyte, i));
+			}
+			printf(" ");
 		}
 		puts("");
 	}

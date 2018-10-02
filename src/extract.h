@@ -50,28 +50,71 @@ huff_node *recreate_tree(char *arr, int *visited, int i) {
 	}
 }
 
+void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrashless_size, huff_node *root) {
+	int current_bit = 0, bit_i = 0;
+	unsigned char current_byte;
+	fscanf(original_file, "%c", &current_byte);
+	huff_node* current_node = root;
+	
+	printf("CURRENT %d THRASHLESS %d\n", current_bit, thrashless_size);
+	while(current_bit < thrashless_size) {
+		printf("%d", get_bit(current_byte, bit_i));
+		if(bit_i == 8) {
+			fscanf(original_file, "%c", &current_byte);
+			bit_i = 0;
+		}
+		if(current_node->left == NULL && current_node->right == NULL) {
+			fprintf(extracted_file, "%c", *(char *)current_node->value);
+			current_node = root;
+		}
+		if(get_bit(current_byte, bit_i)) {
+			current_node = current_node->right;
+		}
+		else {
+			current_node = current_node->right;
+		}
+
+		bit_i += 1;
+		current_bit += 1;
+	}
+	puts("");
+	printf("Done.\n");
+}
+
 void extract(char *filename) {
-	// Load the file that will be extracted
+	// Try to load the file that will be extracted
 	FILE *file = fopen(filename, "r");
 	if(file == NULL) {
 		printf("Error! File could not be loaded successfully.\nExiting...\n");
 		return;
 	}
 
+	// Try to load the extracted file
+	int extracted_filesize = strlen(filename) - 5;
+	char *extracted_filename = malloc(extracted_filesize * sizeof(char));
+	strcpy(extracted_filename, filename);
+	extracted_filename[extracted_filesize] = '\0';
+	FILE *extracted = fopen(extracted_filename, "r");
+	if(extracted != NULL) {
+		printf("Error! extracted file already exists.\nExiting...\n");
+		return;
+	}
+	extracted = fopen(extracted_filename, "w");
+
 	// The two first bytes of the file provides us the information needed to build the tree that will be used
 	unsigned char header[2];
-	int thrash = 0, tree_size = 0;
+	int thrash_size = 0, tree_size = 0;
 	fscanf(file, "%c%c", &header[0], &header[1]);
 
 	// Three fors to organize the reading of the header values.
-	for(int i = 5; i < 8; ++i) {
-	  thrash += get_bit(header[0], i)*pow(2, i);
+	for(int i = 0; i < 3; ++i) {
+	  thrash_size += get_bit(header[0], i)*pow(2, 2-i);
 	}
 	for(int i = 0; i < 8; ++i) {
-		tree_size += get_bit(header[1], i)*pow(2, i);
+		tree_size += get_bit(header[1], i)*pow(2, 7-i);
 	}
-	for(int i = 0; i < 5; ++i) {
-		tree_size += get_bit(header[0], i)*pow(2, 8+i);
+	for(int i = 3; i < 8; ++i) {
+		tree_size += get_bit(header[0], i)*pow(2, 7+(5-i));
 	}
 	
 	// Read the tree bytes from file and store those in an array
@@ -81,12 +124,26 @@ void extract(char *filename) {
 		fscanf(file, "%c", &arr[i]);
 	}
 
-	// Recreate the tree based on the preorder array that was read.
+	// Recreate the tree based on the preorder array that was read, and then get the file size.
 	huff_node* tree = recreate_tree(arr, visited, 0);
+	fseek(file, 0L, SEEK_END);
+	long file_size = ftell(file);
+
+	// Rewind the file and escape the header.
+	rewind(file);
+	char thrash;
+	fscanf(file, "%c%c", &thrash, &thrash);
+	for(int i = 0; i < tree_size; i++) {
+		fscanf(file, "%c", &thrash);
+	}
+
+	// Recreate the extracted file using the tree
+	create_extracted_file(extracted, file, ((file_size - 2 - tree_size) * 8) - thrash_size, tree);
 	
 	DEBUG {
-		printf("THRASH: %d TREE_SIZE: %d\n", thrash, tree_size);
+		printf("FILESIZE: %d THRASH: %d TREE_SIZE: %d\n", file_size, thrash_size, tree_size);
 		print_tree(tree);
+		puts("");
 	}
 	fclose(file);
 }

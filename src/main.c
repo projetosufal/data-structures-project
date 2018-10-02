@@ -8,7 +8,7 @@ int main(int argc, char **argv) {
 	/* 
 	The command that will determine the operation to be executed is passed as the first argument (argv[1]).
 	the available command/operation touples are: (-c, compress), (-e, extract) and (-h, help).
-	The file that will be used is passed as the second argument (argv[2]) when the program is executed. 
+	The file that will be used is passed as the second argument (argv[2]) when the program is executed.
 
 	An example of the usage is: ./program -c picture.jpg, that will compress the file "picture.jpg"
 	The file specified will be stored in the variable "file", as read-only, to ensure that the original data is not
