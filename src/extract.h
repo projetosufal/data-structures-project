@@ -141,7 +141,7 @@ void extract(char *filename) {
 	create_extracted_file(extracted, file, ((file_size - 2 - tree_size) * 8) - thrash_size, tree);
 	
 	DEBUG {
-		printf("FILESIZE: %d THRASH: %d TREE_SIZE: %d\n", file_size, thrash_size, tree_size);
+		printf("FILESIZE: %ld THRASH: %d TREE_SIZE: %d\n", file_size, thrash_size, tree_size);
 		print_tree(tree);
 		puts("");
 	}

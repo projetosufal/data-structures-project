@@ -39,6 +39,7 @@ huff_node *add_to_tail(huff_node *head, void *item, int freq) {
 		}
 		head = head->next;
 	}
+	return NULL;
 }
 
 huff_node *remove_from_tail(huff_node *head) {
@@ -55,6 +56,7 @@ huff_node *remove_from_tail(huff_node *head) {
 		}
 		head = head->next;
 	}
+	return NULL;
 }
 
 // Function that creates a string with the contents of a list.

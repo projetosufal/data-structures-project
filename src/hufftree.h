@@ -134,7 +134,7 @@ void write_preorder(FILE *file, huff_node *root) {
 	}
 	if(root->left == NULL && root->right == NULL &&
 	   (*((char *)root->value) == '*' || *((char *)root->value) == '\\')) {
-		fprintf(file, "\\%c", *((char *)root->value));	
+		fprintf(file, "\\%c", *((char *)root->value));
 	}
 	else {
 		fprintf(file, "%c", *((char *)root->value));
