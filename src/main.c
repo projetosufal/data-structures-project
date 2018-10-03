@@ -26,7 +26,6 @@ int main(int argc, char **argv) {
 			printf("Error! No file specified.\nExiting...\n");
 			return 1;
 		}
-		printf("Compressing file...\n");
 		compress(argv[2]);
 	} 
 	else if(strcmp(argv[1], "-e") == 0) {

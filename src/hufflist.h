@@ -1,7 +1,9 @@
 #ifndef _HUFFLIST_H_
 #define _HUFFLIST_H_
 
-#define DEBUG if(1)
+#define DEBUG if(0)
+
+typedef unsigned char byte;
 
 typedef struct huff_node {
 	void *value;
@@ -62,14 +64,14 @@ huff_node *remove_from_tail(huff_node *head) {
 // Function that creates a string with the contents of a list.
 void to_string(huff_node *node, char **destination) {
 	int current_size = 255;
-	unsigned char *str = malloc(current_size * sizeof(char));
+	byte *str = malloc(current_size * sizeof(char));
 	int i = 0;
 	while(node != NULL) {
 		if(i == current_size) {
 			current_size *= 2;
 			str = realloc(str, current_size * sizeof(char));
 		}
-		str[i] = *((unsigned char *)node->value);
+		str[i] = *((byte *)node->value);
 		node = node->next;
 		i++;
 	}
@@ -86,8 +88,8 @@ huff_node* create_list(int* table) {
 	huff_node* head = NULL;
 	for(i = 0; i < 256; i++) {
 		if(table[i] != 0) {
-			unsigned char *curr_char = malloc(sizeof(char *));
-			*curr_char = (unsigned char)i;
+			byte *curr_char = malloc(sizeof(char *));
+			*curr_char = (byte)i;
 			add_to_head(&head, (void *)curr_char, table[i]);
 		}
 	}

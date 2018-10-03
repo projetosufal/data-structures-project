@@ -3,11 +3,11 @@
 #include <stdbool.h>
 
 // Function that returns the i'th bit from a byte.
-bool get_bit(unsigned char c, int i) {
+bool get_bit(byte c, int i) {
 	return (1 << (7-i)) & c;
 }
 
-unsigned char set_bit(unsigned char c, int i) {
+byte set_bit(byte c, int i) {
 	return (1 << (7-i)) | c;
 }
 
@@ -45,29 +45,44 @@ void build_huffman_tree(huff_node **huffman_tree, huff_node *frequency_list) {
 	build_huffman_tree(huffman_tree, frequency_list);
 }
 
+void free_tree(huff_node **root) {
+	if(*root == NULL) {
+		return;
+	}
+	if((*root)->left == NULL && (*root)->right == NULL) {
+		free((*root)->value);
+		free(*root);
+		return;
+	}
+	free_tree(&(*root)->left);
+	free_tree(&(*root)->right);
+	free((*root)->value);
+	free(*root);
+}
+
 /*
 Function that does a binary search on the given tree and returns the steps taken to find the node (which is the new alias for the byte).
 When the recursion goes to the left child node, we add a 0 to the current alias, when it goes to the right child node, we add a 1.
 
 This function changes the "result" pointer instead of returning.
 */
-void search_tree(huff_node *root, unsigned char c, huff_node *current_alias, char **result) {
+void search_tree(huff_node *root, byte c, huff_node *current_alias, char **result) {
 		if(root != NULL) {
 			if(root->left == NULL && root->right == NULL) {
-				if(*((unsigned char *)root->value) == c) {
+				if(*((byte *)root->value) == c) {
 					to_string(current_alias, result);
 				}
 				return;
 			}
 			if(root != NULL && root->left != NULL) {
-				unsigned char *char_to_add = malloc(sizeof(char));
+				byte *char_to_add = malloc(sizeof(char));
 				*char_to_add = '0';
 				current_alias = add_to_tail(current_alias, (void *)char_to_add, 0);
 					search_tree(root->left, c, current_alias, result);
 					current_alias = remove_from_tail(current_alias);
 			}
 			if(root != NULL && root->right != NULL) {
-				unsigned char *char_to_add = malloc(sizeof(char));
+				byte *char_to_add = malloc(sizeof(char));
 				*char_to_add = '1';
 				current_alias = add_to_tail(current_alias, (void *)char_to_add, 0);
 					search_tree(root->right, c, current_alias, result);
@@ -83,7 +98,7 @@ void search_tree(huff_node *root, unsigned char c, huff_node *current_alias, cha
 
 void get_tree_size(huff_node *root, int *size) {
 	if(root->left == NULL && root->right == NULL) {
-		if(*((unsigned char*)root->value) == '*' || *((unsigned char*)root->value) == '\\') {
+		if(*((byte*)root->value) == '*' || *((byte*)root->value) == '\\') {
 			*size += 2;
 		}
 		else {
@@ -101,11 +116,11 @@ void write_preorder(FILE *file, huff_node *root) {
 		return;
 	}
 	if(root->left == NULL && root->right == NULL &&
-	   (*((unsigned char *)root->value) == '*' || *((unsigned char *)root->value) == '\\')) {
-		fprintf(file, "\\%c", *((unsigned char *)root->value));
+	   (*((byte *)root->value) == '*' || *((byte *)root->value) == '\\')) {
+		fprintf(file, "\\%c", *((byte *)root->value));
 	}
 	else {
-		fprintf(file, "%c", *((unsigned char *)root->value));
+		fprintf(file, "%c", *((byte *)root->value));
 	}
 	write_preorder(file, root->left);
 	write_preorder(file, root->right);
@@ -117,7 +132,7 @@ void print_tree(huff_node *huffman_tree) {
 		printf(" () ");
 		return;
 	} else {
-		printf(" ( %d %c", (int)huffman_tree->freq, *((unsigned char *)huffman_tree->value));
+		printf(" ( %d %c", (int)huffman_tree->freq, *((byte *)huffman_tree->value));
 	}
 
 	print_tree(huffman_tree->left);
