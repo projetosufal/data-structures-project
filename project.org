@@ -4,23 +4,26 @@
 
 * Project development
 ** TODO General Documentation
-- [-] Presentation [1/5]
+- [-] Presentation [2/4]
   - [X] License 
-  - [ ] Format
-  - [ ] Org general file
+  - [X] Formats
   - [ ] LaTex files
 
 ** TODO Segmentation tree
-- [ ] TODO
+- [ ] Presentation [0/2]
+  - [ ] Functions [0/2]
+    - [ ] Query
+    - [ ] Update
+  - [ ] Algorithm Vizualization
   
 ** TODO Huffman
 - [ ] Documentation [0/2]
   - [ ] Every ADT
   - [ ] TODO
-- [ ] Huffman algorithm [0/3]
-  - [ ] Compress files
-  - [ ] Extract files
-  - [ ] Structures done with pointer to void
+- [X] Huffman algorithm [3/3]
+  - [X] Compress files
+  - [X] Extract files
+  - [X] Structures done with pointer to void
 - [ ] Write unitary cases for every data structure [0/1]
   - [ ] TODO
 - [ ] Program [0/1]
