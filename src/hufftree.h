@@ -82,7 +82,13 @@ void search_tree(huff_node *root, unsigned char c, huff_node *current_alias, cha
 }
 
 void get_tree_size(huff_node *root, int *size) {
-	if(root == NULL) {
+	if(root->left == NULL && root->right == NULL) {
+		if(*((unsigned char*)root->value) == '*' || *((unsigned char*)root->value) == '\\') {
+			*size += 2;
+		}
+		else {
+			*size += 1;
+		}
 		return;
 	}
 	*size += 1;

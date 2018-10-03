@@ -94,10 +94,9 @@ void extract(char *filename) {
 	}
 
 	// Try to load the extracted file
-	int extracted_filesize = strlen(filename) - 4;
+	int extracted_filesize = strlen(filename) - 5;
 	unsigned char *extracted_filename = malloc(extracted_filesize * sizeof(char));
 	strcpy(extracted_filename, filename);
-	extracted_filename[extracted_filesize-1] = 'x';
 	extracted_filename[extracted_filesize] = '\0';
 	FILE *extracted = fopen(extracted_filename, "r");
 	if(extracted != NULL) {

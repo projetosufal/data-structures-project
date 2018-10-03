@@ -15,6 +15,7 @@ void create_table(FILE *file, int *table) {
 
 // Function to change the contents of the "header" array using set_bit() to match the desired header configuration.
 void create_header(int thrash_size, int tree_size, unsigned char *header) {
+	printf("\nTREE SIZE: %d TRASH SIZE: %d\n", tree_size, thrash_size);
 	for(int i = 2; i >= 0; --i) {
 		if(thrash_size % 2) {
 			header[0] = set_bit(header[0], i);
@@ -165,7 +166,7 @@ void compress(char *filename) {
 	}
 
 	DEBUG {
-		//print_tree(huffman_tree);
+		print_tree(huffman_tree);
 		puts("");
 	}
 
