@@ -54,20 +54,20 @@ This function changes the "result" pointer instead of returning.
 void search_tree(huff_node *root, unsigned char c, huff_node *current_alias, char **result) {
 		if(root != NULL) {
 			if(root->left == NULL && root->right == NULL) {
-				if(*((char *)root->value) == c) {
+				if(*((unsigned char *)root->value) == c) {
 					to_string(current_alias, result);
 				}
 				return;
 			}
 			if(root != NULL && root->left != NULL) {
-				char *char_to_add = malloc(sizeof(char));
+				unsigned char *char_to_add = malloc(sizeof(char));
 				*char_to_add = '0';
 				current_alias = add_to_tail(current_alias, (void *)char_to_add, 0);
 					search_tree(root->left, c, current_alias, result);
 					current_alias = remove_from_tail(current_alias);
 			}
 			if(root != NULL && root->right != NULL) {
-				char *char_to_add = malloc(sizeof(char));
+				unsigned char *char_to_add = malloc(sizeof(char));
 				*char_to_add = '1';
 				current_alias = add_to_tail(current_alias, (void *)char_to_add, 0);
 					search_tree(root->right, c, current_alias, result);
@@ -95,11 +95,11 @@ void write_preorder(FILE *file, huff_node *root) {
 		return;
 	}
 	if(root->left == NULL && root->right == NULL &&
-	   (*((char *)root->value) == '*' || *((char *)root->value) == '\\')) {
-		fprintf(file, "\\%c", *((char *)root->value));
+	   (*((unsigned char *)root->value) == '*' || *((unsigned char *)root->value) == '\\')) {
+		fprintf(file, "\\%c", *((unsigned char *)root->value));
 	}
 	else {
-		fprintf(file, "%c", *((char *)root->value));
+		fprintf(file, "%c", *((unsigned char *)root->value));
 	}
 	write_preorder(file, root->left);
 	write_preorder(file, root->right);
@@ -111,7 +111,7 @@ void print_tree(huff_node *huffman_tree) {
 		printf(" () ");
 		return;
 	} else {
-		printf(" ( %d %c", (int)huffman_tree->freq, *((char*)huffman_tree->value));
+		printf(" ( %d %c", (int)huffman_tree->freq, *((unsigned char *)huffman_tree->value));
 	}
 
 	print_tree(huffman_tree->left);

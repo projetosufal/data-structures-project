@@ -14,7 +14,7 @@ void create_table(FILE *file, int *table) {
 }
 
 // Function to change the contents of the "header" array using set_bit() to match the desired header configuration.
-void create_header(int thrash_size, int tree_size, char *header) {
+void create_header(int thrash_size, int tree_size, unsigned char *header) {
 	for(int i = 2; i >= 0; --i) {
 		if(thrash_size % 2) {
 			header[0] = set_bit(header[0], i);
@@ -33,7 +33,18 @@ void create_header(int thrash_size, int tree_size, char *header) {
 		}
 		tree_size /= 2;
 	}
-	puts("");
+
+	DEBUG {
+		for(int i = 0; i < 8; i++) {
+			printf("%d", get_bit(header[0], i));
+		}
+		printf(" ");
+
+		for(int i = 0; i < 8; i++) {
+			printf("%d", get_bit(header[1], i));
+		}
+		printf("\n");
+	}
 }
 
 void create_compressed_file(char *filename, FILE *file, huff_node *root) {
@@ -55,7 +66,7 @@ void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 	compressed_file = fopen(compressed_filename, "w");
 	
 	// Empty header that will be overwritten when the real thrash size is discovered.
-	char *header = calloc(2, sizeof(char));
+	unsigned char *header = calloc(2, sizeof(char));
 	create_header(0, 0, header);
 	fprintf(compressed_file, "%c%c", header[0], header[1]);
 
@@ -111,15 +122,15 @@ void create_compressed_file(char *filename, FILE *file, huff_node *root) {
 	fclose(compressed_file);
 	fopen(compressed_filename, "r");
 	DEBUG {
-		char mybyte;
+		unsigned char mybyte;
 		
-		while(fscanf(compressed_file, "%c", &mybyte) != EOF) {
+		/*while(fscanf(compressed_file, "%c", &mybyte) != EOF) {
 			for(int i = 0; i < 8; i++) {
 				printf("%d", get_bit(mybyte, i));
 			}
 			printf(" ");
 		}
-		puts("");
+		puts("");*/
 	}
 	printf("Done.\n");
 	fclose(compressed_file);
@@ -148,18 +159,19 @@ void compress(char *filename) {
 	
 	DEBUG {
 	  while(head != NULL) {
-	    printf("BYTE: %c FREQ: %d\n", *((char *)head->value), head->freq);
+	    printf("BYTE: %c FREQ: %d\n", *((unsigned char *)head->value), head->freq);
 	    head = head->next;
 	  }
 	}
 
 	DEBUG {
-		print_tree(huffman_tree);
+		//print_tree(huffman_tree);
 		puts("");
 	}
 
 	// create a new file, insert header (tree size, tree preorder) and start compressing using the tree
 	create_compressed_file(filename, file, huffman_tree);
+
 	fclose(file);
 }
 #endif

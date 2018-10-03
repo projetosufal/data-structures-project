@@ -66,7 +66,7 @@ void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrash
 			bit_i = 0;
 		}
 		if(current_node->left == NULL && current_node->right == NULL) {
-			fprintf(extracted_file, "%c", *(char *)current_node->value);
+			fprintf(extracted_file, "%c", *(unsigned char *)current_node->value);
 			current_node = root;
 		}
 		if(get_bit(current_byte, bit_i)) {
@@ -94,9 +94,10 @@ void extract(char *filename) {
 	}
 
 	// Try to load the extracted file
-	int extracted_filesize = strlen(filename) - 5;
-	char *extracted_filename = malloc(extracted_filesize * sizeof(char));
+	int extracted_filesize = strlen(filename) - 4;
+	unsigned char *extracted_filename = malloc(extracted_filesize * sizeof(char));
 	strcpy(extracted_filename, filename);
+	extracted_filename[extracted_filesize-1] = 'x';
 	extracted_filename[extracted_filesize] = '\0';
 	FILE *extracted = fopen(extracted_filename, "r");
 	if(extracted != NULL) {
@@ -135,7 +136,7 @@ void extract(char *filename) {
 
 	// Rewind the file and escape the header.
 	rewind(file);
-	char thrash;
+	unsigned char thrash;
 	fscanf(file, "%c%c", &thrash, &thrash);
 	for(int i = 0; i < tree_size; i++) {
 		fscanf(file, "%c", &thrash);
