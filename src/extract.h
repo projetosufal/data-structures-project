@@ -52,23 +52,25 @@ huff_node *recreate_tree(byte *arr, int *visited, int i, int tree_size) {
 	}
 }
 
-void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrashless_size, huff_node *root) {
+void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrashless_size, int thrash, huff_node *root) {
 	int current_bit = 0;
 	byte current_byte;
 	huff_node* current_node = root;
 	
 	DEBUG {
 		printf("CURRENT %d THRASH %d\n", current_bit, thrashless_size);
-	}
-	while(fscanf(original_file, "%c", &current_byte) != EOF && current_bit < thrashless_size) {
-		for(int i = 0; i < 8; ++i, ++current_bit) {
+	} 
+	while(fscanf(original_file, "%c", &current_byte) != EOF) {
+		for(int i = 0; i < 8 && current_bit <= thrashless_size; ++i, ++current_bit) {
 			DEBUG {
 				printf("%d", get_bit(current_byte, i));
 			}
 			if(current_node->left == NULL && current_node->right == NULL) {
 				fprintf(extracted_file, "%c", *((byte *)current_node->value));
+				printf("%c", *((byte *)current_node->value));
 				current_node = root;
 			}
+				printf("%d", get_bit(current_byte, i));
 			if(get_bit(current_byte, i)) {
 				current_node = current_node->right;
 			}
@@ -76,6 +78,9 @@ void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrash
 				current_node = current_node->left;
 			}
 		}
+	}
+	if(thrash == 0) {
+		fprintf(extracted_file, "%c", *((byte *)current_node->value));
 	}
 	DEBUG {
 		puts("");
@@ -147,9 +152,9 @@ void extract(char *filename) {
 		print_tree(huffman_tree);
 		puts("");
 	}
-
+	printf("%d\n", thrash_size);
 	// Recreate the extracted file using the tree
-	create_extracted_file(extracted_file, file, (file_size - 2 - tree_size) * 8 - thrash_size, huffman_tree);
+	create_extracted_file(extracted_file, file, ((file_size - 2 - tree_size) * 8 - thrash_size), 0, huffman_tree);
 
 	fclose(file);
 	fclose(extracted_file);
