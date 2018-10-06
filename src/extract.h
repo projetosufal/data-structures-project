@@ -6,6 +6,13 @@
 #include "compress.h"
 #include <stdbool.h>
 
+int balance(huff_node *root, int height) {
+  if(root->left == NULL && root->right == NULL) {
+    return 1;
+  }
+  return balance(root->left, height+1) - balance(root->right, height+1);
+}
+
 // Recursive function to recreate a tree based on it's pre-order array
 huff_node *recreate_tree(byte *arr, int *visited, int i, int tree_size) {
 	// We need to mark the current position of the array as visited.
@@ -67,10 +74,8 @@ void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrash
 			}
 			if(current_node->left == NULL && current_node->right == NULL) {
 				fprintf(extracted_file, "%c", *((byte *)current_node->value));
-				printf("%c", *((byte *)current_node->value));
 				current_node = root;
 			}
-				printf("%d", get_bit(current_byte, i));
 			if(get_bit(current_byte, i)) {
 				current_node = current_node->right;
 			}
@@ -79,10 +84,11 @@ void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrash
 			}
 		}
 	}
-	if(thrash == 0) {
+	if(thrash == 0 && balance(root, 0) == 0) {
 		fprintf(extracted_file, "%c", *((byte *)current_node->value));
 	}
 	DEBUG {
+    printf("%d\n", balance(root, 0));
 		puts("");
 	}
 }
@@ -97,7 +103,7 @@ void extract(char *filename) {
 
 	// Try to load the extracted file
 	int extracted_filesize = strlen(filename) - 5;
-	byte *extracted_filename = malloc(extracted_filesize * sizeof(char));
+	char *extracted_filename = malloc(extracted_filesize * sizeof(char));
 	strcpy(extracted_filename, filename);
 	extracted_filename[extracted_filesize] = '\0';
 	FILE *extracted_file = fopen(extracted_filename, "r");
@@ -152,7 +158,6 @@ void extract(char *filename) {
 		print_tree(huffman_tree);
 		puts("");
 	}
-	printf("%d\n", thrash_size);
 	// Recreate the extracted file using the tree
 	create_extracted_file(extracted_file, file, ((file_size - 2 - tree_size) * 8 - thrash_size), 0, huffman_tree);
 

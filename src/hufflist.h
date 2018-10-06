@@ -64,7 +64,7 @@ huff_node *remove_from_tail(huff_node *head) {
 // Function that creates a string with the contents of a list.
 void to_string(huff_node *node, char **destination) {
 	int current_size = 255;
-	byte *str = malloc(current_size * sizeof(char));
+	char *str = malloc(current_size * sizeof(char));
 	int i = 0;
 	while(node != NULL) {
 		if(i == current_size) {
