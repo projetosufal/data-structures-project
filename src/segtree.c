@@ -2,45 +2,73 @@
 #include <stdlib.h>
 
 int
-min_tree(int l, int r)
+min_tree(int a, int b)
 {
-  if(l > r)
-    return r;
+  if(a == 0)
+    return b;
+  if(b == 0)
+    return a;
+  
+  if(a > b)
+    return b;
   else
-    return l;
+    return a;
 }
 
 int
-max_tree(int l, int r)
+max_tree(int a, int b)
 {
-  if(l < r)
-    return r;
+  if(a == 0)
+    return b;
+  if(b == 0)
+    return a;
+  
+  if(a < b)
+    return b;
   else
-    return l;
+    return a;
 }
   
 int
-sum(int l, int r)
+sum_tree(int a, int b)
 {
-  return l + r;
+  return a + b;
+}
+
+int
+query(int (*f)(int l_num, int r_num), int *tree,
+      int node, int min, int max, int l, int r)
+{
+  if(r < min || max < l)
+    return 0;
+  
+  if(l <= min && max <= r)
+    return tree[node];
+  
+  int mid, l_bipod, r_bipod;  
+  mid = (min+max)/2;
+  
+  l_bipod = query((*f), tree, 2*node + 1, min , mid, l , r);
+  r_bipod = query((*f), tree, 2*node + 2, mid + 1 , max, l, r);
+  return((*f)(l_bipod, r_bipod));
 }
 
 void
-buildtree(int (*f)(int l, int r), int *v, int *tree,
-	  int *t_size, int key, int min, int max)
+buildtree(int (*f)(int l_num, int r_num), int *v, int *tree,
+	  int *t_size, int node, int min, int max)
 {
   int mid;
   
   if(min == max)
-    tree[key] = v[min];
+    tree[node] = v[min];
 
   else
     {
       mid = (min+max)/2;
       
-      buildtree((*f), v, tree, t_size, 2*key+1, min , mid);
-      buildtree((*f), v, tree, t_size, 2*key+2, mid+1 , max);
-      tree[key] = (*f)(tree[2*key +1], tree[2*key + 2]);
+      buildtree((*f), v, tree, t_size, 2*node + 1, min , mid);
+      buildtree((*f), v, tree, t_size, 2*node + 2, mid + 1 , max);
+      tree[node] = (*f)(tree[2*node +1], tree[2*node + 2]);
     }
 }
 
@@ -61,12 +89,19 @@ main(void)
       scanf("%d", &v[i]);
     }
   
-  buildtree(sum, v, tree, &t_size, 0, 0, v_size-1);
-  //  buildtree(min_tree, v, tree, &t_size, 0, 0, v_size-1);
+  //  buildtree(sum_tree, v, tree, &t_size, 0, 0, v_size-1);
+  buildtree(min_tree, v, tree, &t_size, 0, 0, v_size-1);
   //  buildtree(max_tree, v, tree, &t_size, 0, 0, v_size-1);
   
   for(i=0;i<t_size;++i)
     {
       printf("A[%d] = %d\n", i, tree[i]);
+    }
+
+  int left, right;
+  while(1)
+    {
+      scanf("%d %d", &left, &right);
+      printf("%d\n",query(min_tree, tree, 0, 0, v_size-1, left, right));
     }
 }
