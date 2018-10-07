@@ -41,7 +41,7 @@ int push(node_srtruct **head, int data, int priority, int i) {
 } 
 
 void parsefile(char *origin_name, char *destination_name) {
-	int iterates = 0, acumulado = 0; 
+	int iterates = 0; long long int acumulado = 0; 
 
 	node_srtruct *pQueue = NULL;
 
@@ -56,10 +56,10 @@ void parsefile(char *origin_name, char *destination_name) {
 		// printf("data %d prioridade %d\n", item, priority);
 		iterates = push(&pQueue, item, priority, 1);
 		acumulado += iterates;
-		fprintf(destination_file, "%d %d %d\n", i, iterates, acumulado);
+		fprintf(destination_file, "%d %d %lli\n", i, iterates, acumulado);
 		++i;
 	}
-	printf("Total de inserções: %d \nTotal de iterações: %d\n", i, acumulado);
+	printf("Total de inserções: %d \nTotal de iterações: %lli\n", i, acumulado);
 }
 
 
