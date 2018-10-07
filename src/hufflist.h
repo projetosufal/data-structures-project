@@ -24,17 +24,10 @@ huff_node *create_huff_node(void *item, int freq, huff_node *next, huff_node *le
 	return new_node;
 }
 
-void create_huff_node_test() {
-
-}
-
 void add_to_head(huff_node **head, void *item, int freq) {
 	*head = create_huff_node(item, freq, *head, NULL, NULL);
 }
 
-void add_to_head_test() {
-  
-}
 
 huff_node *add_to_tail(huff_node *head, void *item, int freq) {
 	if(head == NULL) {
@@ -67,10 +60,6 @@ huff_node *remove_from_tail(huff_node *head) {
 		head = head->next;
 	}
 	return NULL;
-}
-
-void add_to_tail_test() {
-  
 }
 
 // Function that creates a string with the contents of a list.
