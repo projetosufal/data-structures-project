@@ -67,7 +67,7 @@ void search_tree_test() {
   byte *value0 = malloc(sizeof(char));
   *value0 = 'a';
   huff_node *list = create_huff_node(value0, 2, NULL, NULL, NULL);
-  add_to_tail(list, NULL, 3);
+  list = add_to_tail(list, NULL, 3);
   build_huffman_tree(&huffman_tree, list);
   char *str = malloc(sizeof(char));
   search_tree(huffman_tree, 'a', NULL, &str);
@@ -76,11 +76,14 @@ void search_tree_test() {
 
 void get_tree_size_test() {
   huff_node *huffman_tree;
-  huff_node *list = create_huff_node(NULL, 2, NULL, NULL, NULL);
-  add_to_tail(list, NULL, 3);
+  int *table = calloc(256, sizeof(int));
+  FILE *file = fopen("sample_file", "r");
+  create_table(file, table);
+  huff_node *head = create_list(table);
+  build_huffman_tree(&huffman_tree, head);
   int sz = 0;
   get_tree_size(huffman_tree, &sz);
-  CU_ASSERT_EQUAL(sz, 3);
+  CU_ASSERT_EQUAL(sz, 11);
 }
 
 int main() {
