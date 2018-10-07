@@ -63,12 +63,11 @@ huff_node *remove_from_tail(huff_node *head) {
 }
 
 void free_list(huff_node *head) {
-  if(head == NULL) {
-    return;
+  while(head != NULL) {
+    huff_node *nxt = head->next;
+    free(head);
+    head = nxt; 
   }
-  huff_node *nxt = head->next;
-  free(head);
-  free_list(nxt);
 }
 
 // Function that creates a string with the contents of a list.

@@ -59,20 +59,20 @@ void create_compressed_file(FILE *compressed_file, FILE *original_file, huff_nod
 	byte byte_to_search;
 	byte *current_byte = calloc(1, sizeof(char));
 	short int bit_i = 0, thrash_size = 0, bytes = 0, current_bit = 0;
-
 	// This while loop runs once for each byte in the original file.
 	while(fscanf(original_file, "%c", &byte_to_search) != EOF) {
 		char *string_to_add = malloc(sizeof(char));
-		search_tree(root, byte_to_search, NULL, &string_to_add);
-		
+    search_tree(root, byte_to_search, NULL, &string_to_add);
+		int string_size = strlen(string_to_add);
 		int i = 0;
-		while(i < strlen(string_to_add)) {
+		while(i < string_size) {
 			/*
 			Since we can only write a byte at a time, the program writes everytime the "bit_i" counter hits 8,
 			then the counter is reset to 0.
 			*/
 			if(bit_i == 8) {
 				fprintf(compressed_file, "%c", *current_byte);
+        free(current_byte);
 				current_byte = calloc(1, sizeof(char));
 				bytes += 1;
 				bit_i = 0;

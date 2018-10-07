@@ -65,6 +65,7 @@ When the recursion goes to the left child node, we add a 0 to the current alias,
 
 This function changes the "result" pointer instead of returning.
 */
+
 void search_tree(huff_node *root, byte c, huff_node *current_alias, char **result) {
 		if(root != NULL) {
 			if(root->left == NULL && root->right == NULL) {
@@ -77,15 +78,17 @@ void search_tree(huff_node *root, byte c, huff_node *current_alias, char **resul
 				byte *char_to_add = malloc(sizeof(char));
 				*char_to_add = '0';
 				current_alias = add_to_tail(current_alias, (void *)char_to_add, 0);
-					search_tree(root->left, c, current_alias, result);
-					current_alias = remove_from_tail(current_alias);
+				search_tree(root->left, c, current_alias, result);
+				current_alias = remove_from_tail(current_alias);
+        free(char_to_add);
 			}
 			if(root != NULL && root->right != NULL) {
 				byte *char_to_add = malloc(sizeof(char));
 				*char_to_add = '1';
 				current_alias = add_to_tail(current_alias, (void *)char_to_add, 0);
-					search_tree(root->right, c, current_alias, result);
-					current_alias = remove_from_tail(current_alias);
+				search_tree(root->right, c, current_alias, result);
+				current_alias = remove_from_tail(current_alias);
+        free(char_to_add);
 			}
 		}
 		else {
