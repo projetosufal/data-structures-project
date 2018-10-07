@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define DEBUG if(0)
 
 int
 min_tree(int a, int b)
@@ -28,11 +29,33 @@ max_tree(int a, int b)
   else
     return a;
 }
-  
+
 int
 sum_tree(int a, int b)
 {
   return a + b;
+}
+
+void
+updatetree(int (*f)(int l_num, int r_num), int *tree,
+	   int node, int min, int max, int l, int r, int val)
+{
+  int mid;
+  if(min > max || min > r || max < l)
+    return ;
+  
+  if(min == max)
+    {
+      tree[node] = val;
+      return;
+    }
+  
+  mid = (min+max)/2;
+      
+  updatetree((*f), tree, 2*node + 1, min , mid, l, r, val);
+  updatetree((*f), tree, 2*node + 2, mid + 1 , max, l, r, val);
+  
+  tree[node] = (*f)(tree[2*node +1], tree[2*node + 2]);
 }
 
 int
@@ -89,19 +112,31 @@ main(void)
       scanf("%d", &v[i]);
     }
   
-  //  buildtree(sum_tree, v, tree, &t_size, 0, 0, v_size-1);
-  buildtree(min_tree, v, tree, &t_size, 0, 0, v_size-1);
+  buildtree(sum_tree, v, tree, &t_size, 0, 0, v_size-1);
+  //  buildtree(min_tree, v, tree, &t_size, 0, 0, v_size-1);
   //  buildtree(max_tree, v, tree, &t_size, 0, 0, v_size-1);
   
   for(i=0;i<t_size;++i)
     {
       printf("A[%d] = %d\n", i, tree[i]);
     }
-
-  int left, right;
-  while(1)
+  
+  int left, right, n_v;
+  
+  DEBUG
     {
       scanf("%d %d", &left, &right);
-      printf("%d\n",query(min_tree, tree, 0, 0, v_size-1, left, right));
+      printf("%d\n",query(sum_tree, tree, 0, 0, v_size-1, left, right));
+      //      printf("%d\n",query(min_tree, tree, 0, 0, v_size-1, left, right));
+      //      printf("%d\n",query(max_tree, tree, 0, 0, v_size-1, left, right));
+    }
+  
+  scanf("%d %d %d", &left, &right, &n_v);
+
+  updatetree(sum_tree, tree, 0, 0, v_size-1, left, right, n_v);
+
+  for(i=0;i<t_size;++i)
+    {
+      printf("A[%d] = %d\n", i, tree[i]);
     }
 }
