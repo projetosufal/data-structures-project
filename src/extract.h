@@ -45,7 +45,7 @@ huff_node *recreate_tree(byte *arr, int *visited, int i, int tree_size) {
 			byte *c = malloc(sizeof(char));
 			*c = '*';
 			huff_node* root = create_huff_node((void *)c, 0, NULL, NULL, NULL);
-      
+
 			// Since the tree is in preorder, we know that the left child is the character immediately after the current one.
 			root->left = recreate_tree(arr, visited, i+1, tree_size);
 
@@ -58,7 +58,7 @@ huff_node *recreate_tree(byte *arr, int *visited, int i, int tree_size) {
 			return root;
 		}
 	}
-  return root;
+  return NULL;
 }
 
 void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrashless_size, int thrash, huff_node *root) {
