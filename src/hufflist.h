@@ -62,6 +62,15 @@ huff_node *remove_from_tail(huff_node *head) {
 	return NULL;
 }
 
+void free_list(huff_node *head) {
+  if(head == NULL) {
+    return;
+  }
+  huff_node *nxt = head->next;
+  free(head);
+  free_list(nxt);
+}
+
 // Function that creates a string with the contents of a list.
 void to_string(huff_node *node, char **destination) {
 	int current_size = 255;
@@ -69,7 +78,7 @@ void to_string(huff_node *node, char **destination) {
 	int i = 0;
 	while(node != NULL) {
 		if(i == current_size) {
-			current_size *= 2;
+			current_size += 255;
 			str = realloc(str, current_size * sizeof(char));
 		}
 		str[i] = *((byte *)node->value);
@@ -79,6 +88,7 @@ void to_string(huff_node *node, char **destination) {
 	str[i] = '\0';
 	*destination = realloc(*destination, current_size * sizeof(char));
 	strcpy(*destination, str);
+  free_list(node);
 	free(str);
 }
 

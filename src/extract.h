@@ -86,7 +86,8 @@ void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrash
 			}
 		}
 	}
-	if(thrash == 0 && balance(root, 0) == 0) {
+	if(thrash == 0) {
+    //&& balance(root, 0) == 0
 		fprintf(extracted_file, "%c", *((byte *)current_node->value));
 	}
 	DEBUG {
@@ -165,7 +166,7 @@ void extract(char *filename) {
 	}
 
 	// Recreate the extracted file using the tree
-	create_extracted_file(extracted_file, file, ((file_size - 2 - tree_size) * 8 - thrash_size), 0, huffman_tree);
+	create_extracted_file(extracted_file, file, ((file_size - 2 - tree_size) * 8 - thrash_size), thrash_size, huffman_tree);
 
 	fclose(file);
 	fclose(extracted_file);

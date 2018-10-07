@@ -59,7 +59,6 @@ void create_compressed_file(FILE *compressed_file, FILE *original_file, huff_nod
 	byte byte_to_search;
 	byte *current_byte = calloc(1, sizeof(char));
 	short int bit_i = 0, thrash_size = 0, bytes = 0, current_bit = 0;
-	// We go back to the beginning of the file and start the compression process.
 
 	// This while loop runs once for each byte in the original file.
 	while(fscanf(original_file, "%c", &byte_to_search) != EOF) {
@@ -86,7 +85,7 @@ void create_compressed_file(FILE *compressed_file, FILE *original_file, huff_nod
 			bit_i += 1;
 			i += 1;
 		}
-
+    free(string_to_add);
 	}
 	fprintf(compressed_file, "%c", *current_byte);
 
@@ -145,8 +144,11 @@ void compress(char *filename) {
 	huff_node *head = create_list(table);
 	sort_frequency(&head);
 	build_huffman_tree(&huffman_tree, head);
+
+  // We go back to the beginning of the file and start the compression process.
 	rewind(file);
-	DEBUG {
+	
+  DEBUG {
 		while(head != NULL) {
 		    printf("BYTE: %c FREQ: %d\n", *((byte *)head->value), head->freq);
 		    head = head->next;
