@@ -17,7 +17,7 @@ int balance(huff_node *root, int height) {
 huff_node *recreate_tree(byte *arr, int *visited, int i, int tree_size) {
 	// We need to mark the current position of the array as visited.
 	visited[i] = 1;
-	/* 
+	/*
 	If the current position in the array is not '*', the current position can only be:
 	1. A leaf node;
 	2. A backslash escaping a leaf node; 
@@ -45,6 +45,7 @@ huff_node *recreate_tree(byte *arr, int *visited, int i, int tree_size) {
 			byte *c = malloc(sizeof(char));
 			*c = '*';
 			huff_node* root = create_huff_node((void *)c, 0, NULL, NULL, NULL);
+      
 			// Since the tree is in preorder, we know that the left child is the character immediately after the current one.
 			root->left = recreate_tree(arr, visited, i+1, tree_size);
 
@@ -57,6 +58,7 @@ huff_node *recreate_tree(byte *arr, int *visited, int i, int tree_size) {
 			return root;
 		}
 	}
+  return root;
 }
 
 void create_extracted_file(FILE *extracted_file, FILE *original_file, int thrashless_size, int thrash, huff_node *root) {
@@ -135,17 +137,20 @@ void extract(char *filename) {
 	for(int i = 3; i < 8; ++i) {
 		tree_size += get_bit(header[0], i)*pow(2, 8+(7-i));
 	}
+
 	// Read the tree bytes from file and store those in an array
 	byte arr[tree_size];
 	int *visited = calloc(tree_size, sizeof(int));
 	for(int i = 0; i < tree_size; ++i) {
 		fscanf(file, "%c", &arr[i]);
 	}
+
 	// Recreate the tree based on the preorder array that was read, and then get the file size.
 	huff_node* huffman_tree = recreate_tree(arr, visited, 0, tree_size);
 	fseek(file, 0L, SEEK_END);
 	long file_size = ftell(file);
 	// Rewind the file and escape the header.
+
 	rewind(file);
 	byte thrash1, thrash2;
 	fscanf(file, "%c%c", &thrash1, &thrash2);
@@ -154,10 +159,11 @@ void extract(char *filename) {
 	}
 
 	DEBUG {
-		printf("FILESIZE: %ld THRASH: %d TREE_SIZE: %d\n", file_size, tree_size);
+		printf("FILESIZE: %ld THRASH: %d TREE_SIZE: %d\n", file_size, thrash_size, tree_size);
 		print_tree(huffman_tree);
 		puts("");
 	}
+
 	// Recreate the extracted file using the tree
 	create_extracted_file(extracted_file, file, ((file_size - 2 - tree_size) * 8 - thrash_size), 0, huffman_tree);
 

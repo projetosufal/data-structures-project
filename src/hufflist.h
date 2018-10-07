@@ -24,8 +24,16 @@ huff_node *create_huff_node(void *item, int freq, huff_node *next, huff_node *le
 	return new_node;
 }
 
+void create_huff_node_test() {
+
+}
+
 void add_to_head(huff_node **head, void *item, int freq) {
 	*head = create_huff_node(item, freq, *head, NULL, NULL);
+}
+
+void add_to_head_test() {
+  
 }
 
 huff_node *add_to_tail(huff_node *head, void *item, int freq) {
@@ -61,6 +69,10 @@ huff_node *remove_from_tail(huff_node *head) {
 	return NULL;
 }
 
+void add_to_tail_test() {
+  
+}
+
 // Function that creates a string with the contents of a list.
 void to_string(huff_node *node, char **destination) {
 	int current_size = 255;
@@ -83,7 +95,7 @@ void to_string(huff_node *node, char **destination) {
 
 /* Function to create a "linked list" using the elements of an integer array as the frequency 
 and the index converted to ascii as the value. */
-huff_node* create_list(int* table) {
+huff_node *create_list(int* table) {
 	int i;
 	huff_node* head = NULL;
 	for(i = 0; i < 256; i++) {

@@ -12,7 +12,6 @@ byte set_bit(byte c, int i) {
 }
 
 void build_huffman_tree(huff_node **huffman_tree, huff_node *frequency_list) {
-
 	if (frequency_list == NULL || frequency_list->next == NULL) {
 		*huffman_tree = frequency_list;
 		return;
@@ -37,7 +36,7 @@ void build_huffman_tree(huff_node **huffman_tree, huff_node *frequency_list) {
 		frequency_list = new_node;
 		*huffman_tree = frequency_list;
 		return;
-	} 
+	}
 
 	// set the new node next to its position
 	new_node->next = aux_node->next;
