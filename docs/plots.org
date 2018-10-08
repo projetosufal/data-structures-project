@@ -12,13 +12,14 @@
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 26.1 (Org mode 9.1.9)
 
-* Without Heap - Best vs Worst cases
-** Best: O(1)
+* Best cases
+** Without heap - O(1)
 [[../plot/img/fila_sem_heap_melhor.png]]
-** Worst: O(n)
-[[../plot/img/fila_sem_heap_pior.png]]
-* With Heap - Best vs Worst cases
-** Best: O(1)
+** With heap - O(1)
 [[../plot/img/fila_com_heap_melhor.png]]
-** Worst: O(log n)
+
+* Worst cases
+** Without heap - O(n)
+[[../plot/img/fila_sem_heap_pior.png]]
+** With Heap: O(log n)
 [[../plot/img/fila_com_heap_pior.png]]
