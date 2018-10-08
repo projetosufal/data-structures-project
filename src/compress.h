@@ -62,7 +62,7 @@ void create_compressed_file(FILE *compressed_file, FILE *original_file, huff_nod
 	// This while loop runs once for each byte in the original file.
 	while(fscanf(original_file, "%c", &byte_to_search) != EOF) {
 		char *string_to_add = malloc(sizeof(char));
-    search_tree(root, byte_to_search, NULL, &string_to_add);
+    search_tree(root, byte_to_search, NULL, NULL, &string_to_add);
 		int string_size = strlen(string_to_add);
 		int i = 0;
 		while(i < string_size) {

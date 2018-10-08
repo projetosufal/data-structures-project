@@ -28,24 +28,18 @@ void add_to_head(huff_node **head, void *item, int freq) {
 	*head = create_huff_node(item, freq, *head, NULL, NULL);
 }
 
+void add_to_tail(huff_node **head, huff_node **tail, void *item, int freq) {
+  if(*head == NULL) {
+    *head = create_huff_node(item, freq, NULL, NULL, NULL);
+    *tail = *head;
+    return;
+  }
 
-huff_node *add_to_tail(huff_node *head, void *item, int freq) {
-	if(head == NULL) {
-		return create_huff_node(item, freq, NULL, NULL, NULL);
-	}
-
-	huff_node *old_head = head;
-	while(head != NULL) {
-		if(head->next == NULL) {
-			head->next = create_huff_node(item, freq, NULL, NULL, NULL);
-			return old_head;
-		}
-		head = head->next;
-	}
-	return NULL;
+  (*tail)->next = create_huff_node(item, freq, NULL, NULL, NULL);
+  *tail = (*tail)->next;
 }
 
-huff_node *remove_from_tail(huff_node *head) {
+huff_node *remove_from_tail(huff_node *head, huff_node **tail) {
 	if(head == NULL || head->next == NULL) {
 		return NULL;
 	}
@@ -55,6 +49,7 @@ huff_node *remove_from_tail(huff_node *head) {
 		if(head->next->next == NULL) {
 			free(head->next);
 			head->next = NULL;
+      *tail = head;
 			return old_head;
 		}
 		head = head->next;
