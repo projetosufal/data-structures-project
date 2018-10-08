@@ -22,17 +22,19 @@ void add_to_head_test() {
 
 void add_to_tail_test() {
   huff_node *head = create_huff_node(NULL, 0, NULL, NULL, NULL);
-  head = add_to_tail(head, NULL, 3);
-  CU_ASSERT_PTR_NULL(head->next->value);
-  CU_ASSERT_EQUAL(head->next->freq, 3);
+  huff_node *tail = head;
+  add_to_tail(&head, &tail, NULL, 3);
+  CU_ASSERT_PTR_NULL(tail->value);
+  CU_ASSERT_EQUAL(tail->freq, 3);
 }
 
 void remove_from_tail_test() {
   huff_node *head = create_huff_node(NULL, 0, NULL, NULL, NULL);
-  head = add_to_tail(head, NULL, 3);
-  head = add_to_tail(head, NULL, 4);
-  remove_from_tail(head);
-  CU_ASSERT_EQUAL(head->next->freq, 3);
+  huff_node *tail = head;
+  add_to_tail(&head, &tail, NULL, 3);
+  add_to_tail(&head, &tail, NULL, 4);
+  remove_from_tail(head, &tail);
+  CU_ASSERT_EQUAL(tail->freq, 3);
 }
 
 void create_list_test() {
@@ -55,23 +57,12 @@ void merge_test() {
 void build_huffman_tree_test() {
   huff_node *huffman_tree;
   huff_node *list = create_huff_node(NULL, 2, NULL, NULL, NULL);
-  add_to_tail(list, NULL, 3);
+  huff_node* tail = list;
+  add_to_tail(&list, &tail, NULL, 3);
   build_huffman_tree(&huffman_tree, list);
   CU_ASSERT_EQUAL(*((char *)huffman_tree->value), '*');
   CU_ASSERT_EQUAL(huffman_tree->left->freq, 2);
   CU_ASSERT_EQUAL(huffman_tree->right->freq, 3);
-}
-
-void search_tree_test() {
-  huff_node *huffman_tree;
-  byte *value0 = malloc(sizeof(char));
-  *value0 = 'a';
-  huff_node *list = create_huff_node(value0, 2, NULL, NULL, NULL);
-  list = add_to_tail(list, NULL, 3);
-  build_huffman_tree(&huffman_tree, list);
-  char *str = malloc(sizeof(char));
-  search_tree(huffman_tree, 'a', NULL, &str);
-  CU_ASSERT_EQUAL(strcmp(str, "0"), 0);
 }
 
 void get_tree_size_test() {
