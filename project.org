@@ -9,13 +9,10 @@
   - [X] Formats
   - [ ] LaTex files
 
-** TODO Segmentation tree
-- [ ] Presentation [0/2]
-  - [ ] Functions [0/2]
-    - [ ] Query
-    - [ ] Update
-  - [ ] Algorithm Vizualization
-  
+** Segmentation tree
+[[./docs/segtree-presentation.pdf][Segment tree Presentation]]
+- [[https://visualgo.net/en/segmenttree?slide=1][Visualgo]]: A simple segtree vizualization.
+
 ** TODO Huffman
 - [ ] Documentation [0/2]
   - [ ] Every ADT
