@@ -4,13 +4,27 @@
 
 * Project
 ** Description
-
+   This project is divided in tree parts
+- A presentation about Segment tree - an algorithm not seen in class
+- A fully functional huffman algorithm, well documented
+- Simple algorithm complexity comparison - Priority queues with and without Heaps
 
 ** Segmentation tree
 - [[./docs/segtree-presentation.pdf][Segment tree Presentation]]
 - [[https://visualgo.net/en/segmenttree?slide=1][Visualgo]]: A simple segtree vizualization.
 
 ** DONE Huffman
+*** Usage
+    Clone this rep.
+#+BEGIN_EXAMPLE
+$ git clone https://github.com/projetosufal/data-structures-project
+#+END_EXAMPLE
+use make to build binaries
+#+BEGIN_EXAMPLE
+$ make
+#+END_EXAMPLE
+
+*** Progress Track
 - [X] Documentation [1/1]
   - [X] Every ADT
 - [X] Huffman algorithm [3/3]
