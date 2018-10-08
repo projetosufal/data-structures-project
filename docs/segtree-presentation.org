@@ -1,23 +1,50 @@
-#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+STARTUP: beamer
+#+OPTIONS: @:t ':nil *:t -:t ::t <:t H:2 \n:nil ^:t arch:headline 
 #+OPTIONS: author:t broken-links:nil c:nil creator:nil
 #+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+OPTIONS: timestamp:t title:t toc:t num:t todo:t |:t
 #+TITLE: Segment Tree
-#+DATE: <2018-09-30 Sun>
-#+AUTHOR: ma, nl, f, la
+#+DATE: https://github.com/projetosufal/data-structures-project
+#+AUTHOR: Matheus Artur, Luís Alberto Cabús, Nicolas Leão, Fábio Vinícius
 #+EMAIL: macc@ic.ufal.br
 #+LANGUAGE: en
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 #+CREATOR: Emacs 26.1 (Org mode 9.1.9)
-#+OPTIONS: H:1
 #+LATEX_CLASS: beamer
-#+COLUMNS: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
-#+BEAMER_THEME: default
-#+BEAMER_COLOR_THEME:
-#+BEAMER_FONT_THEME:
-#+BEAMER_INNER_THEME:
-#+BEAMER_OUTER_THEME:
-#+BEAMER_HEADER:
+#+COLUMNS: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt) %10BEAMER_extra(Extra)
+#+BEAMER_THEME: Hannover
+#+LaTeX_CLASS_OPTIONS: [presentation,12pt]
+#+BEAMER_FRAME_LEVEL: 2
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:https://orgmode.org/org-info.js
 
+* Introduction
+
+** Stock Exchange
+*** The problem                                                     :B_block:
+    :PROPERTIES:
+    :BEAMER_COL: 0.48
+    :BEAMER_env: block
+    :END:
+- Data from thousands of companies worldwide, active for decades
+- Usage of multiple operations requiring da range/interval of time required
+- Efficiency demand
+
+*** O(n) operations?                                                :B_block:
+    :PROPERTIES:
+    :BEAMER_COL: 0.48
+    :BEAMER_env: block
+    :END:
+#+LABEL:   fig:fig1
+
+  [[./img/serv.png]]
+* Segment tree
+** Segment tree
+*** How it is structured?
+    The Segtree is a binary tree that's represented from a array, where each node represents a unique interval or segment of the tree and stores a *specific* value. 
+*** For what purpose?
+    The value, are usually represented by /maximum/, /minimum/ or /sum/ of the segment. The goal is acess these values as a search within a range.
+** 
+[[./img/segtree.jpg]]
+** 
