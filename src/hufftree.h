@@ -60,24 +60,22 @@ void free_tree(huff_node **root) {
 }
 
 /*
-Function that does a binary search on the given tree and returns the steps taken to find the node (which is the new alias for the byte).
+Function that does a binary search on the given tree and creates a hash table with the new aliases for the bytes.
 When the recursion goes to the left child node, we add a 0 to the current alias, when it goes to the right child node, we add a 1.
 
-This function changes the "result" pointer instead of returning.
+This function changes the "table" pointer instead of returning.
 */
-void search_tree(huff_node *root, byte c, huff_node *current_alias, huff_node *tail, char **result) {
+void gen_aliases(char **table, huff_node *root, huff_node *current_alias, huff_node *tail) {
     if(root != NULL) {
       if(root->left == NULL && root->right == NULL) {
-        if(*((byte *)root->value) == c) {
-          to_string(current_alias, result);
-        }
+        to_string(current_alias, &table[*((byte *)root->value)]);
         return;
       }
       if(root != NULL && root->left != NULL) {
         byte *char_to_add = malloc(sizeof(char));
         *char_to_add = '0';
         add_to_tail(&current_alias, &tail, (void *)char_to_add, 0);
-        search_tree(root->left, c, current_alias, tail, result);
+        gen_aliases(table, root->left, current_alias, tail);
         current_alias = remove_from_tail(current_alias, &tail);
         free(char_to_add);
       }
@@ -85,7 +83,7 @@ void search_tree(huff_node *root, byte c, huff_node *current_alias, huff_node *t
         byte *char_to_add = malloc(sizeof(char));
         *char_to_add = '1';
         add_to_tail(&current_alias, &tail, (void *)char_to_add, 0);
-        search_tree(root->right, c, current_alias, tail, result);
+        gen_aliases(table, root->right, current_alias, tail);
         current_alias = remove_from_tail(current_alias, &tail);
         free(char_to_add);
       }

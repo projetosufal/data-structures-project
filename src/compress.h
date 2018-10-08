@@ -59,10 +59,17 @@ void create_compressed_file(FILE *compressed_file, FILE *original_file, huff_nod
 	byte byte_to_search;
 	byte *current_byte = calloc(1, sizeof(char));
 	short int bit_i = 0, thrash_size = 0, bytes = 0, current_bit = 0;
+
+  // We create a table where we will store the aliases for each byte to minimize tree navigation.
+  char **table = calloc(256, sizeof(char *));
+  for(int i = 0; i < 256; ++i) {
+    table[i] = malloc(sizeof(char));
+  }
+
+  gen_aliases(table, root, NULL, NULL);
 	// This while loop runs once for each byte in the original file.
 	while(fscanf(original_file, "%c", &byte_to_search) != EOF) {
-		char *string_to_add = malloc(sizeof(char));
-    search_tree(root, byte_to_search, NULL, NULL, &string_to_add);
+		char *string_to_add = table[byte_to_search];
 		int string_size = strlen(string_to_add);
 		int i = 0;
 		while(i < string_size) {
@@ -85,9 +92,13 @@ void create_compressed_file(FILE *compressed_file, FILE *original_file, huff_nod
 			bit_i += 1;
 			i += 1;
 		}
-    free(string_to_add);
 	}
 	fprintf(compressed_file, "%c", *current_byte);
+
+  for(int i = 0; i < 256; ++i) {
+    free(table[i]);
+  }
+  free(table);
 
 	// The compressed file needs to be rewinded so that we can update the header with the new thrash size.
 	rewind(compressed_file);
