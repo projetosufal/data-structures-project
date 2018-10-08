@@ -10,18 +10,17 @@
 - [[./docs/segtree-presentation.pdf][Segment tree Presentation]]
 - [[https://visualgo.net/en/segmenttree?slide=1][Visualgo]]: A simple segtree vizualization.
 
-** TODO Huffman
-- [ ] Documentation [0/2]
-  - [ ] Every ADT
-  - [ ] TODO
+** DONE Huffman
+- [X] Documentation [1/1]
+  - [X] Every ADT
 - [X] Huffman algorithm [3/3]
   - [X] Compress files
   - [X] Extract files
   - [X] Structures done with pointer to void
-- [ ] Write unitary cases for every data structure [0/1]
-  - [ ] TODO
-- [ ] Program [0/1]
-  - [ ] MakeFile
+- [X] Write unitary cases for every data structure [1/1]
+  - [X] Cunit tests
+- [X] Program [1/1]
+  - [X] MakeFile
 
 ** Priority Queue - With vs. Without Heap
 - [[./docs/plots.org][A comparison]]
