@@ -10,7 +10,7 @@
   - [ ] LaTex files
 
 ** Segmentation tree
-[[./docs/segtree-presentation.pdf][Segment tree Presentation]]
+- [[./docs/segtree-presentation.pdf][Segment tree Presentation]]
 - [[https://visualgo.net/en/segmenttree?slide=1][Visualgo]]: A simple segtree vizualization.
 
 ** TODO Huffman
@@ -38,3 +38,12 @@
   - [ ] Data storage & run
   - [ ] Info gathering solution for comparison
   - [ ] Usage of MakeFile/Program execution method
+
+
+
+
+
+
+
+
+
