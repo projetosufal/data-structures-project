@@ -15,7 +15,7 @@
 #+LATEX_CLASS: beamer
 #+COLUMNS: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt) %10BEAMER_extra(Extra)
 #+BEAMER_THEME: Hannover
-#+LaTeX_CLASS_OPTIONS: [presentation,9pt]
+#+LaTeX_CLASS_OPTIONS: [presentation,12pt]
 #+BEAMER_FRAME_LEVEL: 2
 #+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:https://orgmode.org/org-info.js
 
@@ -28,10 +28,11 @@
     :BEAMER_env: block
     :END:
 - Data from thousands of companies worldwide, active for decades
-- Usage of multiple operations requiring da range/interval of time required
-- Efficiency demand
+- Usage of multiple operations requiring a range/interval of data in any capacity
+- Recources are not inifinite, must be optimized as best as possible
 
-*** O(n) operations?                                                :B_block:
+
+*** O(n) operations? No!                                            :B_block:
     :PROPERTIES:
     :BEAMER_COL: 0.48
     :BEAMER_env: block
@@ -82,67 +83,25 @@
 - O(log n)
 - can modify any [l:r] section, than it will propagate updating dependencies
 ** Building a Segtree
-#+BEGIN_EXAMPLE c
-void
-buildtree(int (*f)(int l_num, int r_num), int *v, int *tree,
-	  int *t_size, int node, int min, int max)
-{
-  int mid;
-  
-  if(min == max)
-    tree[node] = v[min];
+[[./img/build.png]]
 
-  else
-    {
-      mid = (min+max)/2;
-      
-      buildtree((*f), v, tree, t_size, 2*node + 1, min , mid);
-      buildtree((*f), v, tree, t_size, 2*node + 2, mid + 1 , max);
-      tree[node] = (*f)(tree[2*node +1], tree[2*node + 2]);
-    }
-}
-#+END_EXAMPLE
 ** Query 
-#+BEGIN_EXAMPLE c
-int
-query(int (*f)(int l_num, int r_num), int *tree,
-      int node, int min, int max, int l, int r)
-{
-  if(r < min || max < l)
-    return 0;
-  
-  if(l <= min && max <= r)
-    return tree[node];
-  
-  int mid, l_bipod, r_bipod;  
-  mid = (min+max)/2;
-  
-  l_bipod = query((*f), tree, 2*node + 1, min , mid, l , r);
-  r_bipod = query((*f), tree, 2*node + 2, mid + 1 , max, l, r);
-  return((*f)(l_bipod, r_bipod));
-}
-#+END_EXAMPLE
+[[./img/query.png]]
+
 ** Update
-#+BEGIN_EXAMPLE c
-void
-updatetree(int (*f)(int l_num, int r_num), int *tree,
-	   int node, int min, int max, int l, int r, int val)
-{
-  int mid;
-  if(min > max || min > r || max < l)
-    return ;
-  
-  if(min == max)
-    {
-      tree[node] = val;
-      return;
-    }
-  
-  mid = (min+max)/2;
-      
-  updatetree((*f), tree, 2*node + 1, min , mid, l, r, val);
-  updatetree((*f), tree, 2*node + 2, mid + 1 , max, l, r, val);
-  
-  tree[node] = (*f)(tree[2*node +1], tree[2*node + 2]);
-}
-#+END_EXAMPLE
+[[./img/update.png]]
+* Peek: Segtree as a base for advanced algorithms
+** Segtree as a base for advanced algorithms
+As seen, segtree is a flexible algorithm, such power can be used as a base for even more advanced algorithms, such as Heavy Light Decomposition
+- HLD takes segtree to another new level, transforming linear paths of the graph into multiple segtrees
+** Heavy Light Decomposition - a Segtree in graph
+[[./img/hld.png]]
+* Conclusion
+** Conclusion
+the algorithm is better suited to solve problems of:
+- analysis of big chunks of data
+- reorganization and update of said data
+And these properties are highly applicable in fields of stock market, weather analysis and competitive programming alike
+
+
+

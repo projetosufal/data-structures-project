@@ -1,6 +1,6 @@
-% Created 2018-10-08 Mon 08:11
+% Created 2018-10-08 Mon 15:40
 % Intended LaTeX compiler: pdflatex
-\documentclass[presentation,9pt]{beamer}
+\documentclass[presentation,12pt]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
@@ -34,22 +34,23 @@
 
 
 \section{Intro}
-\label{sec:org6c00d7c}
+\label{sec:org2504831}
 
-\begin{frame}[label={sec:org8eef74a}]{Stock Exchange}
+\begin{frame}[label={sec:org40c6638}]{Stock Exchange}
 \begin{columns}
 \begin{column}{0.48\columnwidth}
 \begin{block}{The problem}
 \begin{itemize}
 \item Data from thousands of companies worldwide, active for decades
-\item Usage of multiple operations requiring da range/interval of time required
-\item Efficiency demand
+\item Usage of multiple operations requiring a range/interval of data in any capacity
+\item Recources are not inifinite, must be optimized as best as possible
 \end{itemize}
 \end{block}
 \end{column}
 
+
 \begin{column}{0.48\columnwidth}
-\begin{block}{O(n) operations?}
+\begin{block}{O(n) operations? No!}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./img/serv.png}
 \end{center}
@@ -58,8 +59,8 @@
 \end{columns}
 \end{frame}
 \section{Segment tree}
-\label{sec:org6a430e8}
-\begin{frame}[label={sec:org7e22879}]{Segment tree}
+\label{sec:orgf9892d7}
+\begin{frame}[label={sec:org33dcb1a}]{Segment tree}
 \begin{columns}
 \begin{column}{0.48\columnwidth}
 \begin{block}{How it is structured?}
@@ -94,15 +95,15 @@ tree[12] & = & A[4:4]\\
 \end{column}
 \end{columns}
 \end{frame}
-\begin{frame}[label={sec:org0a301bf}]{As tree}
+\begin{frame}[label={sec:org677df1e}]{As tree}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./img/segtree.jpg}
 \end{center}
 \end{frame}
 
 \section{Operations}
-\label{sec:org9315c9c}
-\begin{frame}[label={sec:org191c94e}]{Operations}
+\label{sec:org330fa8b}
+\begin{frame}[label={sec:orgf316d2a}]{Operations}
 \begin{block}{Building a tree}
 \begin{itemize}
 \item ( n log n) storage
@@ -121,72 +122,44 @@ tree[12] & = & A[4:4]\\
 \end{itemize}
 \end{block}
 \end{frame}
-\begin{frame}[fragile,label={sec:org5b4f4ac}]{Building a Segtree}
- \begin{verbatim}
-void
-buildtree(int (*f)(int l_num, int r_num), int *v, int *tree,
-	  int *t_size, int node, int min, int max)
-{
-  int mid;
-  
-  if(min == max)
-    tree[node] = v[min];
+\begin{frame}[label={sec:org9f2a104}]{Building a Segtree}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./img/build.png}
+\end{center}
+\end{frame}
 
-  else
-    {
-      mid = (min+max)/2;
-      
-      buildtree((*f), v, tree, t_size, 2*node + 1, min , mid);
-      buildtree((*f), v, tree, t_size, 2*node + 2, mid + 1 , max);
-      tree[node] = (*f)(tree[2*node +1], tree[2*node + 2]);
-    }
-}
-\end{verbatim}
+\begin{frame}[label={sec:orgae0d997}]{Query}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./img/query.png}
+\end{center}
 \end{frame}
-\begin{frame}[fragile,label={sec:orgad4216a}]{Query}
- \begin{verbatim}
-int
-query(int (*f)(int l_num, int r_num), int *tree,
-      int node, int min, int max, int l, int r)
-{
-  if(r < min || max < l)
-    return 0;
-  
-  if(l <= min && max <= r)
-    return tree[node];
-  
-  int mid, l_bipod, r_bipod;  
-  mid = (min+max)/2;
-  
-  l_bipod = query((*f), tree, 2*node + 1, min , mid, l , r);
-  r_bipod = query((*f), tree, 2*node + 2, mid + 1 , max, l, r);
-  return((*f)(l_bipod, r_bipod));
-}
-\end{verbatim}
+
+\begin{frame}[label={sec:orgcf0faf5}]{Update}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./img/update.png}
+\end{center}
 \end{frame}
-\begin{frame}[fragile,label={sec:org2917607}]{Update}
- \begin{verbatim}
-void
-updatetree(int (*f)(int l_num, int r_num), int *tree,
-	   int node, int min, int max, int l, int r, int val)
-{
-  int mid;
-  if(min > max || min > r || max < l)
-    return ;
-  
-  if(min == max)
-    {
-      tree[node] = val;
-      return;
-    }
-  
-  mid = (min+max)/2;
-      
-  updatetree((*f), tree, 2*node + 1, min , mid, l, r, val);
-  updatetree((*f), tree, 2*node + 2, mid + 1 , max, l, r, val);
-  
-  tree[node] = (*f)(tree[2*node +1], tree[2*node + 2]);
-}
-\end{verbatim}
+\section{Peek: Segtree as a base for advanced algorithms}
+\label{sec:orge61c458}
+\begin{frame}[label={sec:org8b6ea4b}]{Segtree as a base for advanced algorithms}
+As seen, segtree is a flexible algorithm, such power can be used as a base for even more advanced algorithms, such as Heavy Light Decomposition
+\begin{itemize}
+\item HLD takes segtree to another new level, transforming linear paths of the graph into multiple segtrees
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org63cf378}]{Heavy Light Decomposition - a Segtree in graph}
+\begin{center}
+\includegraphics[width=.9\linewidth]{./img/hld.png}
+\end{center}
+\end{frame}
+\section{Conclusion}
+\label{sec:org2caf795}
+\begin{frame}[label={sec:orgd18b086}]{Conclusion}
+the algorithm is better suited to solve problems of:
+\begin{itemize}
+\item analysis of big chunks of data
+\item reorganization and update of said data
+\end{itemize}
+And these properties are highly applicable in fields of stock market, weather analysis and competitive programming alike
 \end{frame}
 \end{document}
